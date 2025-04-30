@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lip Jelly - Bitna</title>
     <style>
         * {
@@ -10,67 +10,98 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             overflow: hidden;
-            background-color: #000; /* Black fallback */
+            background-color: #000;
             height: 100vh;
-            width: 100vw;
         }
-        
         .image-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        
         .responsive-image {
-            /* Fill the screen while maintaining aspect ratio */
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Changed from 'contain' to 'cover' */
-            object-position: center top; /* Focus on top portion */
+            object-fit: contain;
         }
-        
-        /* For landscape orientation */
-        @media (orientation: landscape) {
-            .responsive-image {
-                object-fit: contain; /* Show full image in landscape */
-            }
+        /* Visual indicator for the clickable area (remove in production) */
+        .click-hint {
+            position: absolute;
+            border: 2px dashed rgba(255,255,255,0.5);
+            background: rgba(255,0,0,0.2);
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
     <div class="image-container">
-        <img src="Photo/Cover.jpg" alt="Lip Jelly - Love Flutter" class="responsive-image" usemap="#Map">
-        <map name="Map">
-            <area shape="rect" coords="244,1207,1117,1378" href="Choose your card.html" alt="Choose Your Card">
+        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
+        <!-- Visual hint (remove this div for final version) -->
+        <div class="click-hint" id="clickHint"></div>
+        <map name="ImageMap">
+            <!-- Rectangular area covering "Shining dreams begin here" -->
+            <area shape="rect" 
+                  coords="400,1100,900,1250" 
+                  href="Choose your card.html"
+                  alt="Continue to Cards">
         </map>
-</div>
+    </div>
 
-<script>
-        // Dynamic image map scaling
-        function scaleImageMap() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             const img = document.querySelector('.responsive-image');
-            const naturalWidth = 1356;
-            const naturalHeight = 1919;
-            const scaleFactor = img.clientWidth / naturalWidth;
+            const hint = document.getElementById('clickHint');
             
-            const areas = document.querySelectorAll('area');
-            areas.forEach(area => {
-                const coords = area.getAttribute('coords').split(',').map(Number);
-                const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
+            function scaleElements() {
+                // Original image dimensions
+                const naturalWidth = 1356;
+                const naturalHeight = 1919;
+                
+                // Current display dimensions
+                const displayWidth = img.clientWidth;
+                const displayHeight = img.clientHeight;
+                
+                // Scale coordinates for image map
+                const scaleX = displayWidth / naturalWidth;
+                const scaleY = displayHeight / naturalHeight;
+                
+                // Update image map coordinates
+                const area = document.querySelector('area');
+                const originalCoords = [400,1100,900,1250]; // left,top,right,bottom
+                const scaledCoords = [
+                    Math.round(originalCoords[0] * scaleX),
+                    Math.round(originalCoords[1] * scaleY),
+                    Math.round(originalCoords[2] * scaleX),
+                    Math.round(originalCoords[3] * scaleY)
+                ];
                 area.setAttribute('coords', scaledCoords.join(','));
+                
+                // Update visual hint position (remove in production)
+                hint.style.left = `${scaledCoords[0]}px`;
+                hint.style.top = `${scaledCoords[1]}px`;
+                hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
+                hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
+            }
+            
+            // Initialize and update on resize
+            scaleElements();
+            window.addEventListener('resize', scaleElements);
+            
+            // Debug click coordinates (Alt+Click)
+            img.addEventListener('click', function(e) {
+                if (e.altKey) {
+                    const rect = this.getBoundingClientRect();
+                    const x = Math.round(e.clientX - rect.left);
+                    const y = Math.round(e.clientY - rect.top);
+                    const origX = Math.round(x * (1356 / rect.width));
+                    const origY = Math.round(y * (1919 / rect.height));
+                    alert(`Current: ${x},${y}\nOriginal: ${origX},${origY}`);
+                }
             });
-        }
-
-        window.addEventListener('load', scaleImageMap);
-        window.addEventListener('resize', scaleImageMap);
+        });
     </script>
 </body>
 </html>
