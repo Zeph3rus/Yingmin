@@ -13,8 +13,9 @@
         
         body {
             overflow: hidden;
-            background-color: #FFE5E5; /* Matching your design's pink background */
-            font-family: 'Playfair Display', serif;
+            background-color: #000; /* Black fallback */
+            height: 100vh;
+            width: 100vw;
         }
         
         .image-container {
@@ -29,46 +30,20 @@
         }
         
         .responsive-image {
-            /* Custom ratio for your 1356×1919 image (1:1.415) */
-            width: 100vmin;
-            height: 141.5vmin;
-            object-fit: contain;
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Soft shadow for depth */
+            /* Fill the screen while maintaining aspect ratio */
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Changed from 'contain' to 'cover' */
+            object-position: center top; /* Focus on top portion */
         }
         
         /* For landscape orientation */
         @media (orientation: landscape) {
             .responsive-image {
-                width: 141.5vmin;
-                height: 100vmin;
+                object-fit: contain; /* Show full image in landscape */
             }
         }
-        
-        /* Decorative borders for letterboxing */
-        .image-container::before, 
-        .image-container::after {
-            content: '';
-            position: absolute;
-            background: #FFC0CB; /* Lighter pink */
-            z-index: -1;
-        }
-        
-        .image-container::before {
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 10vh;
-        }
-        
-        .image-container::after {
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 10vh;
-        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="image-container">
@@ -79,11 +54,11 @@
     </div>
 
     <script>
-        // Dynamic image map scaling for your specific image size
+        // Dynamic image map scaling
         function scaleImageMap() {
             const img = document.querySelector('.responsive-image');
-            const naturalWidth = 1356; // Your image's actual width
-            const naturalHeight = 1919; // Your image's actual height
+            const naturalWidth = 1356;
+            const naturalHeight = 1919;
             const scaleFactor = img.clientWidth / naturalWidth;
             
             const areas = document.querySelectorAll('area');
@@ -94,25 +69,8 @@
             });
         }
 
-        // Initialize and update on resize
         window.addEventListener('load', scaleImageMap);
         window.addEventListener('resize', scaleImageMap);
-        
-        // Fallback content if image fails to load
-        window.addEventListener('error', function(e) {
-            if (e.target.tagName === 'IMG') {
-                const container = document.querySelector('.image-container');
-                container.innerHTML = `
-                    <div style="text-align:center; color:#D23369; padding:20px;">
-                        <h1 style="font-size:3rem;">Love Flutter</h1>
-                        <h2 style="font-size:2.5rem;">Lip Jelly</h2>
-                        <p style="font-size:2rem; font-style:italic">Shining dreams begin here</p>
-                        <p style="font-size:2.5rem; margin-top:2rem;">Bitna</p>
-                        <a href="Choose your card.html" style="display:block; margin-top:3rem; font-size:1.5rem; color:#D23369;">Choose Your Card →</a>
-                    </div>
-                `;
-            }
-        }, true);
     </script>
 </body>
 </html>
