@@ -2,30 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My First Website</title>
     <style>
-        h1 {
-            font-family: 'Broadway', sans-serif;
-            color: #E698AC;
-           	letter-spacing: 3px; /* Adds spacing between the letters */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            /* Set a base size for consistent scaling */
+            font-size: 16px;
         }
-		p {
-			front-family:'gontserrat',sans-serif;
-			color: #E698AC;
-           	letter-spacing: 1px; /* Adds spacing between the letters */
-			font-size: 40px;
-		}
+        
+        .container {
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Image map area scaling */
+        map area {
+            outline: none; /* Remove dotted outline on some mobile browsers */
+        }
+        
+        /* Maintain aspect ratio for the clickable area */
+        @media (max-width: 768px) {
+            /* Adjust coordinates proportionally for smaller screens */
+            /* You may need to tweak these values based on testing */
+            area[coords] {
+                transform: scale(0.8); /* Example scaling */
+            }
+        }
     </style>
 </head>
 <body>
-    <img src="Photo/Cover.jpg" alt="Cover Image" usemap="#Map">
-    <map name="Map">
-      <area shape="rect" coords="135,662,649,800" href="Choose your card.html">
-    </map>
-    <h1>You are about to glow differently 
-— and beautifully.</h1>
-	<p><b>Transformation is near. 
-Shine in your own new colors.</b></p>
-    <a href="https://www.youtube.com/watch?v=jWQx2f-CErU&list=RDjWQx2f-CErU&start_radio=1"><img src="Photo/play-button.png"></a>
+    <div class="container">
+        <img src="Photo/Cover.jpg" alt="Cover Image" usemap="#Map">
+        <map name="Map">
+            <area shape="rect" coords="135,662,649,800" href="Choose your card.html" alt="Choose Your Card">
+        </map>
+    </div>
+    
+    <script>
+        // JavaScript to help maintain consistent sizing
+        document.addEventListener('DOMContentLoaded', function() {
+            function scaleImageMap() {
+                const img = document.querySelector('img');
+                const originalWidth = 800; // Set this to your image's original width
+                const scaleFactor = img.width / originalWidth;
+                
+                const areas = document.querySelectorAll('area');
+                areas.forEach(area => {
+                    const coords = area.getAttribute('coords').split(',');
+                    const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
+                    area.setAttribute('coords', scaledCoords.join(','));
+                });
+            }
+            
+            // Run on load and resize
+            scaleImageMap();
+            window.addEventListener('resize', scaleImageMap);
+        });
+    </script>
 </body>
 </html>
