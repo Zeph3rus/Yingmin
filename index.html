@@ -4,9 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lip Jelly - Bitna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow: hidden;
+            background-color: #000;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+        
+        .image-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+        }
+        
+        .responsive-image {
+            /* Fill while maintaining aspect ratio */
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            
+            /* Optional: Add smooth transition for orientation changes */
+            transition: all 0.3s ease;
+        }
+        
+        /* Portrait orientation (taller than wide) */
+        @media (orientation: portrait) {
+            .responsive-image {
+                /* Show top portion by default */
+                object-position: top center;
+            }
+        }
+        
+        /* Landscape orientation (wider than tall) */
+        @media (orientation: landscape) {
+            .responsive-image {
+                /* Show center portion */
+                object-position: center center;
+            }
+        }
+        
+        /* Navigation controls (optional) */
+        .nav-control {
+            position: fixed;
+            z-index: 100;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .nav-up {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .nav-down {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
 </head>
 <body>
-<img src="Photo/Page 3.png">
-
+    <div class="image-container">
+        <img src="Photo/Page 3.png" alt="Lip Jelly" class="responsive-image" id="mainImage">
+    </div>
+    
+    <!-- Optional navigation buttons -->
+    <button class="nav-control nav-up" id="btnUp">↑</button>
+    <button class="nav-control nav-down" id="btnDown">↓</button>
+    
+    <script>
+        const image = document.getElementById('mainImage');
+        const btnUp = document.getElementById('btnUp');
+        const btnDown = document.getElementById('btnDown');
+        
+        let currentPosition = 0;
+        const imageHeight = 6140; // Your original image height
+        const imageWidth = 2481;  // Your original image width
+        
+        // Adjust image display based on orientation
+        function adjustImage() {
+            const viewportRatio = window.innerWidth / window.innerHeight;
+            const imageRatio = imageWidth / imageHeight;
+            
+            if (viewportRatio > imageRatio) {
+                // Landscape - image will fit height
+                image.style.objectFit = 'cover';
+            } else {
+                // Portrait - image will fit width
+                image.style.objectFit = 'contain';
+            }
+        }
+        
+        // Navigation functions
+        function scrollImage(direction) {
+            const viewportHeight = window.innerHeight;
+            const step = viewportHeight * 0.8;
+            
+            currentPosition += direction * step;
+            
+            // Limit scrolling to image bounds
+            const maxPosition = (imageHeight - (window.innerHeight * (imageWidth/window.innerWidth))) * 
+                              (window.innerWidth/imageWidth);
+            currentPosition = Math.max(0, Math.min(currentPosition, maxPosition));
+            
+            image.style.objectPosition = `center ${-currentPosition}px`;
+        }
+        
+        // Initialize
+        window.addEventListener('load', adjustImage);
+        window.addEventListener('resize', adjustImage);
+        
+        // Optional navigation event listeners
+        if (btnUp && btnDown) {
+            btnUp.addEventListener('click', () => scrollImage(-1));
+            btnDown.addEventListener('click', () => scrollImage(1));
+            
+            // Touch support
+            let touchStartY = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                const touchY = e.touches[0].clientY;
+                const diff = touchStartY - touchY;
+                scrollImage(diff / 100); // Adjust sensitivity
+                touchStartY = touchY;
+                e.preventDefault();
+            }, { passive: false });
+        }
+    </script>
 </body>
 </html>
