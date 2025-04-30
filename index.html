@@ -2,73 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My First Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Website</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
-            /* Set a base size for consistent scaling */
-            font-size: 16px;
+            box-sizing: border-box;
         }
         
-        .container {
-            width: 100vw; /* Full viewport width */
-            height: 100vh; /* Full viewport height */
-            position: relative;
+        body {
             overflow: hidden;
+            background-color: #000; /* Optional: in case of small gaps */
         }
         
-        img {
+        .image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        /* Image map area scaling */
-        map area {
-            outline: none; /* Remove dotted outline on some mobile browsers */
+        .responsive-image {
+            /* A4 aspect ratio (1:√2 or about 1:1.414) */
+            width: 100vmin; /* Use the smaller viewport dimension */
+            height: 141.4vmin; /* 100 * √2 */
+            object-fit: contain;
+            background-color: white; /* For A4-like background */
         }
         
-        /* Maintain aspect ratio for the clickable area */
-        @media (max-width: 768px) {
-            /* Adjust coordinates proportionally for smaller screens */
-            /* You may need to tweak these values based on testing */
-            area[coords] {
-                transform: scale(0.8); /* Example scaling */
+        /* For landscape orientation */
+        @media (orientation: landscape) {
+            .responsive-image {
+                width: 141.4vmin; /* 100 * √2 */
+                height: 100vmin; /* Use the smaller viewport dimension */
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="Photo/Cover.jpg" alt="Cover Image" usemap="#Map">
+    <div class="image-container">
+        <img src="Photo/Cover.jpg" alt="Cover Image" class="responsive-image" usemap="#Map">
         <map name="Map">
             <area shape="rect" coords="135,662,649,800" href="Choose your card.html" alt="Choose Your Card">
         </map>
     </div>
-    
+
     <script>
-        // JavaScript to help maintain consistent sizing
-        document.addEventListener('DOMContentLoaded', function() {
-            function scaleImageMap() {
-                const img = document.querySelector('img');
-                const originalWidth = 800; // Set this to your image's original width
-                const scaleFactor = img.width / originalWidth;
-                
-                const areas = document.querySelectorAll('area');
-                areas.forEach(area => {
-                    const coords = area.getAttribute('coords').split(',');
-                    const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
-                    area.setAttribute('coords', scaledCoords.join(','));
-                });
-            }
+        // Dynamic image map scaling
+        function scaleImageMap() {
+            const img = document.querySelector('.responsive-image');
+            const naturalWidth = 793; // A4 width in pixels at 72dpi
+            const naturalHeight = 1122; // A4 height in pixels at 72dpi
+            const scaleFactor = img.clientWidth / naturalWidth;
             
-            // Run on load and resize
-            scaleImageMap();
-            window.addEventListener('resize', scaleImageMap);
-        });
+            const areas = document.querySelectorAll('area');
+            areas.forEach(area => {
+                const coords = area.getAttribute('coords').split(',').map(Number);
+                const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
+                area.setAttribute('coords', scaledCoords.join(','));
+            });
+        }
+
+        // Initialize and update on resize
+        window.addEventListener('load', scaleImageMap);
+        window.addEventListener('resize', scaleImageMap);
     </script>
 </body>
 </html>
