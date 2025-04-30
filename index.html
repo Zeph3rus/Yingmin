@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My Website</title>
+    <title>Lip Jelly - Bitna</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,8 @@
         
         body {
             overflow: hidden;
-            background-color: #000; /* Optional: in case of small gaps */
+            background-color: #FFE5E5; /* Matching your design's pink background */
+            font-family: 'Playfair Display', serif;
         }
         
         .image-container {
@@ -28,36 +29,61 @@
         }
         
         .responsive-image {
-            /* A4 aspect ratio (1:√2 or about 1:1.414) */
-            width: 100vmin; /* Use the smaller viewport dimension */
-            height: 141.4vmin; /* 100 * √2 */
+            /* Custom ratio for your 1356×1919 image (1:1.415) */
+            width: 100vmin;
+            height: 141.5vmin;
             object-fit: contain;
-            background-color: white; /* For A4-like background */
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Soft shadow for depth */
         }
         
         /* For landscape orientation */
         @media (orientation: landscape) {
             .responsive-image {
-                width: 141.4vmin; /* 100 * √2 */
-                height: 100vmin; /* Use the smaller viewport dimension */
+                width: 141.5vmin;
+                height: 100vmin;
             }
         }
+        
+        /* Decorative borders for letterboxing */
+        .image-container::before, 
+        .image-container::after {
+            content: '';
+            position: absolute;
+            background: #FFC0CB; /* Lighter pink */
+            z-index: -1;
+        }
+        
+        .image-container::before {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10vh;
+        }
+        
+        .image-container::after {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 10vh;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="image-container">
-        <img src="Photo/Cover.jpg" alt="Cover Image" class="responsive-image" usemap="#Map">
+        <img src="Photo/Cover.jpg" alt="Lip Jelly - Love Flutter" class="responsive-image" usemap="#Map">
         <map name="Map">
             <area shape="rect" coords="135,662,649,800" href="Choose your card.html" alt="Choose Your Card">
         </map>
     </div>
 
     <script>
-        // Dynamic image map scaling
+        // Dynamic image map scaling for your specific image size
         function scaleImageMap() {
             const img = document.querySelector('.responsive-image');
-            const naturalWidth = 793; // A4 width in pixels at 72dpi
-            const naturalHeight = 1122; // A4 height in pixels at 72dpi
+            const naturalWidth = 1356; // Your image's actual width
+            const naturalHeight = 1919; // Your image's actual height
             const scaleFactor = img.clientWidth / naturalWidth;
             
             const areas = document.querySelectorAll('area');
@@ -71,6 +97,22 @@
         // Initialize and update on resize
         window.addEventListener('load', scaleImageMap);
         window.addEventListener('resize', scaleImageMap);
+        
+        // Fallback content if image fails to load
+        window.addEventListener('error', function(e) {
+            if (e.target.tagName === 'IMG') {
+                const container = document.querySelector('.image-container');
+                container.innerHTML = `
+                    <div style="text-align:center; color:#D23369; padding:20px;">
+                        <h1 style="font-size:3rem;">Love Flutter</h1>
+                        <h2 style="font-size:2.5rem;">Lip Jelly</h2>
+                        <p style="font-size:2rem; font-style:italic">Shining dreams begin here</p>
+                        <p style="font-size:2.5rem; margin-top:2rem;">Bitna</p>
+                        <a href="Choose your card.html" style="display:block; margin-top:3rem; font-size:1.5rem; color:#D23369;">Choose Your Card →</a>
+                    </div>
+                `;
+            }
+        }, true);
     </script>
 </body>
 </html>
