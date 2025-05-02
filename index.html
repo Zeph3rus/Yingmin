@@ -10,96 +10,63 @@
             padding: 0;
             box-sizing: border-box;
         }
-        body, html {
+        body {
             overflow: hidden;
-            height: 100%;
-            width: 100%;
-        }
-        .image-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            background-color: #FFE5E5; /* Only visible during scaling */
+            background-color: #FFE5E5; /* Fallback during loading */
         }
-        .responsive-image {
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
-        }
-        /* Debug overlay - remove in production */
-        .debug-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .image-container {
+            position: relative;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            display: none;
+            max-width: 1356px; /* Lock to original image width */
         }
-        .debug-area {
-            position: absolute;
-            border: 2px solid red;
-            background: rgba(255,0,0,0.2);
+        .responsive-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top; /* Focus content at top */
         }
     </style>
 </head>
 <body>
     <div class="image-container">
         <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" id="mainImage" usemap="#ImageMap">
-        <div class="debug-overlay" id="debugOverlay">
-            <div class="debug-area" id="debugArea"></div>
-        </div>
-        <map name="ImageMap" id="imageMap"></map>
+        <map name="ImageMap" id="imageMap">
+            <!-- Dynamic area will be inserted here -->
+        </map>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const img = document.getElementById('mainImage');
-            const debugOverlay = document.getElementById('debugOverlay');
-            const debugArea = document.getElementById('debugArea');
             const map = document.getElementById('imageMap');
             
-            // Original image dimensions
-            const imgWidth = 1356;
-            const imgHeight = 1919;
+            // Original dimensions
+            const originalWidth = 1356;
+            const originalHeight = 1919;
             
-            // Original click area coordinates (1.5x enlarged)
-            const originalCoords = [325,1025,975,1325]; // left,top,right,bottom
+            // Original click area (1.5x enlarged)
+            const originalCoords = [325,1025,975,1325];
             
             function adjustLayout() {
-                const windowWidth = window.innerWidth;
-                const windowHeight = window.innerHeight;
-                const windowRatio = windowWidth / windowHeight;
-                const imgRatio = imgWidth / imgHeight;
+                // Calculate needed height to fill screen
+                const screenHeight = window.innerHeight;
+                const scaleY = screenHeight / originalHeight;
                 
-                // Calculate display dimensions
-                let displayWidth, displayHeight;
+                // Apply vertical stretch (maintain original width)
+                img.style.width = `${originalWidth}px`;
+                img.style.height = `${screenHeight}px`;
                 
-                if (windowRatio > imgRatio) {
-                    // Window is wider than image - fit to height
-                    displayHeight = windowHeight;
-                    displayWidth = displayHeight * imgRatio;
-                } else {
-                    // Window is taller than image - fit to width
-                    displayWidth = windowWidth;
-                    displayHeight = displayWidth / imgRatio;
-                }
-                
-                // Apply image dimensions
-                img.style.width = `${displayWidth}px`;
-                img.style.height = `${displayHeight}px`;
-                
-                // Calculate scaling factor
-                const scale = displayWidth / imgWidth;
-                
-                // Scale click area coordinates
-                const scaledCoords = originalCoords.map(coord => Math.round(coord * scale));
+                // Calculate coordinate scaling (X scales by 1, Y by scaleY)
+                const scaledCoords = [
+                    originalCoords[0], // X unchanged
+                    Math.round(originalCoords[1] * scaleY),
+                    originalCoords[2], // X unchanged
+                    Math.round(originalCoords[3] * scaleY)
+                ];
                 
                 // Update image map
                 map.innerHTML = `
@@ -108,34 +75,11 @@
                           href="Choose your card.html"
                           alt="Continue">
                 `;
-                
-                // Update debug overlay
-                debugArea.style.left = `${scaledCoords[0]}px`;
-                debugArea.style.top = `${scaledCoords[1]}px`;
-                debugArea.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
-                debugArea.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
             }
-            
-            // Toggle debug overlay with 'D' key
-            document.addEventListener('keydown', function(e) {
-                if (e.key.toLowerCase() === 'd') {
-                    debugOverlay.style.display = debugOverlay.style.display === 'none' ? 'block' : 'none';
-                }
-            });
             
             // Initialize and update on resize
             adjustLayout();
             window.addEventListener('resize', adjustLayout);
-            
-            // Touch device debugging
-            img.addEventListener('click', function(e) {
-                if (e.altKey) {
-                    const rect = this.getBoundingClientRect();
-                    const x = Math.round(e.clientX - rect.left);
-                    const y = Math.round(e.clientY - rect.top);
-                    alert(`Clicked at: ${x}, ${y}`);
-                }
-            });
         });
     </script>
 </body>
