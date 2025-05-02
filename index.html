@@ -12,7 +12,7 @@
         }
         body {
             overflow: hidden;
-            background-color: #FFE5E5; /* Match your design's background */
+            background-color: #FFE5E5; /* Match your design background */
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,60 +22,52 @@
             position: relative;
             width: 100%;
             height: 100%;
-            max-width: 1356px; /* Original image width */
-            max-height: 1919px; /* Original image height */
         }
         .responsive-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover; /* Fill entire screen */
+            object-position: center top; /* Focus on top content */
         }
-        /* Visual hint (temporary) */
+        /* Visual hint (press H to toggle) */
         .click-hint {
             position: absolute;
-            border: 2px dashed rgba(255,0,0,0.5);
+            border: 2px dashed red;
             pointer-events: none;
-            display: none; /* Hidden by default */
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="image-container">
-        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" id="mainImage" usemap="#ImageMap">
+        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" id="mainImage">
         <div class="click-hint" id="clickHint"></div>
-        <map name="ImageMap" id="imageMap"></map>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const img = document.getElementById('mainImage');
             const hint = document.getElementById('clickHint');
-            const map = document.getElementById('imageMap');
             
-            // Original coordinates (1.5x enlarged)
-            const originalCoords = [325,1025,975,1325];
+            // Original image dimensions
+            const imgWidth = 1356;
+            const imgHeight = 1919;
+            
+            // Original click area coordinates (1.5x enlarged)
+            const originalCoords = [325,1025,975,1325]; // left,top,right,bottom
             
             function adjustLayout() {
-                const windowRatio = window.innerWidth / window.innerHeight;
-                const imageRatio = 1356 / 1919;
-                
-                if (windowRatio > imageRatio) {
-                    // Wide screen (landscape)
-                    img.style.objectFit = 'contain';
-                    img.style.width = 'auto';
-                    img.style.height = '100%';
-                } else {
-                    // Tall screen (portrait)
-                    img.style.objectFit = 'cover';
-                    img.style.width = '100%';
-                    img.style.height = 'auto';
-                }
+                const screenRatio = window.innerWidth / window.innerHeight;
+                const imgRatio = imgWidth / imgHeight;
                 
                 // Calculate scaling factors
-                const scaleX = img.clientWidth / 1356;
-                const scaleY = img.clientHeight / 1919;
+                const scaleX = img.clientWidth / imgWidth;
+                const scaleY = img.clientHeight / imgHeight;
                 
-                // Scale coordinates
+                // Scale click area coordinates
                 const scaledCoords = [
                     Math.round(originalCoords[0] * scaleX),
                     Math.round(originalCoords[1] * scaleY),
@@ -83,30 +75,48 @@
                     Math.round(originalCoords[3] * scaleY)
                 ];
                 
-                // Update image map
+                // Create/update image map
+                let map = document.querySelector('map');
+                if (!map) {
+                    map = document.createElement('map');
+                    map.name = 'ImageMap';
+                    document.body.appendChild(map);
+                }
                 map.innerHTML = `
                     <area shape="rect"
                           coords="${scaledCoords.join(',')}"
                           href="Choose your card.html"
-                          alt="Continue to Cards">
+                          alt="Continue">
                 `;
+                img.useMap = '#ImageMap';
                 
-                // Update visual hint (for debugging)
+                // Update visual hint
                 hint.style.left = `${scaledCoords[0]}px`;
                 hint.style.top = `${scaledCoords[1]}px`;
                 hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
                 hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
             }
             
-            // Toggle visual hint with keyboard shortcut
+            // Toggle hint with H key
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'h') hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+                if (e.key.toLowerCase() === 'h') {
+                    hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+                }
             });
             
             // Initialize and update on resize
-
             adjustLayout();
             window.addEventListener('resize', adjustLayout);
+            
+            // Debug click positions (Alt+Click)
+            img.addEventListener('click', function(e) {
+                if (e.altKey) {
+                    const rect = this.getBoundingClientRect();
+                    const x = Math.round(e.clientX - rect.left);
+                    const y = Math.round(e.clientY - rect.top);
+                    alert(`Clicked at: ${x}, ${y}`);
+                }
+            });
         });
     </script>
 </body>
