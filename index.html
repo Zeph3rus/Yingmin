@@ -15,28 +15,27 @@
             height: 100vh;
             display: flex;
             justify-content: center;
-            background-color: #FFE5E5; /* Fallback during loading */
+            background-color: #FFE5E5;
         }
         .image-container {
             position: relative;
             width: 100%;
             height: 100%;
-            max-width: 1356px; /* Lock to original image width */
+            max-width: 1356px; /* Original width */
+            overflow: hidden;
         }
         .responsive-image {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top; /* Focus content at top */
+            height: auto;
+            min-height: 100vh; /* Fill screen vertically */
+            object-fit: contain;
         }
     </style>
 </head>
 <body>
     <div class="image-container">
         <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" id="mainImage" usemap="#ImageMap">
-        <map name="ImageMap" id="imageMap">
-            <!-- Dynamic area will be inserted here -->
-        </map>
+        <map name="ImageMap" id="imageMap"></map>
     </div>
 
     <script>
@@ -52,21 +51,14 @@
             const originalCoords = [325,1025,975,1325];
             
             function adjustLayout() {
-                // Calculate needed height to fill screen
-                const screenHeight = window.innerHeight;
-                const scaleY = screenHeight / originalHeight;
+                const container = img.parentElement;
+                const scale = container.clientWidth / originalWidth;
                 
-                // Apply vertical stretch (maintain original width)
-                img.style.width = `${originalWidth}px`;
-                img.style.height = `${screenHeight}px`;
+                // Set image height to maintain aspect ratio
+                img.style.height = `${originalHeight * scale}px`;
                 
-                // Calculate coordinate scaling (X scales by 1, Y by scaleY)
-                const scaledCoords = [
-                    originalCoords[0], // X unchanged
-                    Math.round(originalCoords[1] * scaleY),
-                    originalCoords[2], // X unchanged
-                    Math.round(originalCoords[3] * scaleY)
-                ];
+                // Scale coordinates
+                const scaledCoords = originalCoords.map(coord => Math.round(coord * scale));
                 
                 // Update image map
                 map.innerHTML = `
