@@ -1,78 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lip Jelly - Bitna</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            background-color: #FFE5E5;
-        }
-        .image-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-width: 1356px; /* Original width */
-            overflow: hidden;
-        }
-        .responsive-image {
-            width: 100%;
-            height: auto;
-            min-height: 100vh; /* Fill screen vertically */
-            object-fit: contain;
-        }
-    </style>
-</head>
-<body>
-    <div class="image-container">
-        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" id="mainImage" usemap="#ImageMap">
-        <map name="ImageMap" id="imageMap"></map>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const img = document.getElementById('mainImage');
-            const map = document.getElementById('imageMap');
-            
-            // Original dimensions
-            const originalWidth = 1356;
-            const originalHeight = 1919;
-            
-            // Original click area (1.5x enlarged)
-            const originalCoords = [325,1025,975,1325];
-            
-            function adjustLayout() {
-                const container = img.parentElement;
-                const scale = container.clientWidth / originalWidth;
-                
-                // Set image height to maintain aspect ratio
-                img.style.height = `${originalHeight * scale}px`;
-                
-                // Scale coordinates
-                const scaledCoords = originalCoords.map(coord => Math.round(coord * scale));
-                
-                // Update image map
-                map.innerHTML = `
-                    <area shape="rect"
-                          coords="${scaledCoords.join(',')}"
-                          href="Choose your card.html"
-                          alt="Continue">
-                `;
-            }
-            
-            // Initialize and update on resize
-            adjustLayout();
-            window.addEventListener('resize', adjustLayout);
-        });
-    </script>
-</body>
-</html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>Lip Jelly - Bitna</title>
+     <style>
+         * {
+             margin: 0;
+             padding: 0;
+             box-sizing: border-box;
+         }
+ 
+         body {
+             overflow: hidden;
+             background-color: #000; /* Black fallback */
+             height: 100vh;
+             width: 100vw;
+         }
+ 
+         .image-container {
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+         }
+ 
+         .responsive-image {
+             /* Fill the screen while maintaining aspect ratio */
+             width: 100%;
+             height: 100%;
+             object-fit: cover; /* Changed from 'contain' to 'cover' */
+             object-position: center top; /* Focus on top portion */
+         }
+ 
+         /* For landscape orientation */
+         @media (orientation: landscape) {
+             .responsive-image {
+                 object-fit: contain; /* Show full image in landscape */
+             }
+         }
+         
+     </style>
+ </head>
+ <body>
+     <div class="image-container">
+         <img src="Photo/Cover.jpg" alt="Lip Jelly - Love Flutter" class="responsive-image" usemap="#Map">
+         <map name="Map">
+             <area shape="rect" coords="135,662,649,800" href="Choose your card.html" alt="Choose Your Card">
+         </map>
+     </div>
+ 
+     <script>
+         // Dynamic image map scaling
+         function scaleImageMap() {
+             const img = document.querySelector('.responsive-image');
+             const naturalWidth = 1356;
+             const naturalHeight = 1919;
+             const scaleFactor = img.clientWidth / naturalWidth;
+ 
+             const areas = document.querySelectorAll('area');
+             areas.forEach(area => {
+                 const coords = area.getAttribute('coords').split(',').map(Number);
+                 const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
+                 area.setAttribute('coords', scaledCoords.join(','));
+             });
+         }
+ 
+         // Initialize and update on resize
+         window.addEventListener('load', scaleImageMap);
+         window.addEventListener('resize', scaleImageMap);
+         
+     </script>
+ </body>
+ </html>
