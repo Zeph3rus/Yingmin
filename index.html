@@ -12,114 +12,101 @@
         }
         body {
             overflow: hidden;
-            background-color: #000;
+            background-color: #FFE5E5; /* Match your design's background */
             height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .image-container {
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
             height: 100%;
+            max-width: 1356px; /* Original image width */
+            max-height: 1919px; /* Original image height */
         }
         .responsive-image {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
-        /* Visual indicator for the clickable area (remove in production) */
+        /* Visual hint (temporary) */
         .click-hint {
             position: absolute;
-            border: 2px dashed rgba(255,255,255,0.5);
-            background: rgba(255,0,0,0.2);
+            border: 2px dashed rgba(255,0,0,0.5);
             pointer-events: none;
+            display: none; /* Hidden by default */
         }
     </style>
 </head>
 <body>
     <div class="image-container">
-        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
-        <!-- Visual hint (remove this div for final version) -->
+        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" id="mainImage" usemap="#ImageMap">
         <div class="click-hint" id="clickHint"></div>
-        <map name="ImageMap">
-            <!-- Rectangular area covering "Shining dreams begin here" -->
-            <area shape="rect" 
-                  coords="400,1100,900,1250" 
-                  href="Choose your card.html"
-                  alt="Continue to Cards"
-                  id="clickArea">
-        </map>
+        <map name="ImageMap" id="imageMap"></map>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const img = document.querySelector('.responsive-image');
+            const img = document.getElementById('mainImage');
             const hint = document.getElementById('clickHint');
-            const area = document.getElementById('clickArea');
+            const map = document.getElementById('imageMap');
             
-            function scaleElements() {
-                // Original image dimensions
-                const naturalWidth = 1356;
-                const naturalHeight = 1919;
+            // Original coordinates (1.5x enlarged)
+            const originalCoords = [325,1025,975,1325];
+            
+            function adjustLayout() {
+                const windowRatio = window.innerWidth / window.innerHeight;
+                const imageRatio = 1356 / 1919;
                 
-                // Current display dimensions
-                const displayWidth = img.clientWidth;
-                const displayHeight = img.clientHeight;
+                if (windowRatio > imageRatio) {
+                    // Wide screen (landscape)
+                    img.style.objectFit = 'contain';
+                    img.style.width = 'auto';
+                    img.style.height = '100%';
+                } else {
+                    // Tall screen (portrait)
+                    img.style.objectFit = 'cover';
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                }
                 
-                // Scale factors
-                const scaleX = displayWidth / naturalWidth;
-                const scaleY = displayHeight / naturalHeight;
+                // Calculate scaling factors
+                const scaleX = img.clientWidth / 1356;
+                const scaleY = img.clientHeight / 1919;
                 
-                // Original coordinates
-                const originalCoords = [400,1100,900,1250]; // left,top,right,bottom
-                
-                // Calculate center point
-                const centerX = (originalCoords[0] + originalCoords[2]) / 2;
-                const centerY = (originalCoords[1] + originalCoords[3]) / 2;
-                
-                // Calculate original width/height
-                const originalWidth = originalCoords[2] - originalCoords[0];
-                const originalHeight = originalCoords[3] - originalCoords[1];
-                
-                // Create 1.5x larger coordinates (50% bigger)
-                const enlargedCoords = [
-                    centerX - (originalWidth * 1.5 / 2),  // left
-                    centerY - (originalHeight * 1.5 / 2), // top
-                    centerX + (originalWidth * 1.5 / 2),  // right
-                    centerY + (originalHeight * 1.5 / 2)  // bottom
-                ];
-                
-                // Scale to display size
+                // Scale coordinates
                 const scaledCoords = [
-                    Math.round(enlargedCoords[0] * scaleX),
-                    Math.round(enlargedCoords[1] * scaleY),
-                    Math.round(enlargedCoords[2] * scaleX),
-                    Math.round(enlargedCoords[3] * scaleY)
+                    Math.round(originalCoords[0] * scaleX),
+                    Math.round(originalCoords[1] * scaleY),
+                    Math.round(originalCoords[2] * scaleX),
+                    Math.round(originalCoords[3] * scaleY)
                 ];
                 
-                // Update both elements
-                area.setAttribute('coords', scaledCoords.join(','));
+                // Update image map
+                map.innerHTML = `
+                    <area shape="rect"
+                          coords="${scaledCoords.join(',')}"
+                          href="Choose your card.html"
+                          alt="Continue to Cards">
+                `;
+                
+                // Update visual hint (for debugging)
                 hint.style.left = `${scaledCoords[0]}px`;
                 hint.style.top = `${scaledCoords[1]}px`;
                 hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
                 hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
             }
             
-            // Initialize and update on resize
-            scaleElements();
-            window.addEventListener('resize', scaleElements);
-            
-            // Debug click coordinates (Alt+Click)
-            img.addEventListener('click', function(e) {
-                if (e.altKey) {
-                    const rect = this.getBoundingClientRect();
-                    const x = Math.round(e.clientX - rect.left);
-                    const y = Math.round(e.clientY - rect.top);
-                    const origX = Math.round(x * (1356 / rect.width));
-                    const origY = Math.round(y * (1919 / rect.height));
-                    alert(`Current: ${x},${y}\nOriginal: ${origX},${origY}`);
-                }
+            // Toggle visual hint with keyboard shortcut
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'h') hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
             });
+            
+            // Initialize and update on resize
+
+            adjustLayout();
+            window.addEventListener('resize', adjustLayout);
         });
     </script>
 </body>
