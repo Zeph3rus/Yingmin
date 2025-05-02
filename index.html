@@ -12,7 +12,7 @@
         }
         body {
             overflow: hidden;
-            background-color: #FFE5E5; /* Match your design background */
+            background-color: #FFE5E5; /* Match your design */
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,15 +22,13 @@
             position: relative;
             width: 100%;
             height: 100%;
+            max-width: 1356px; /* Original image width */
+            max-height: 1919px; /* Original image height */
         }
         .responsive-image {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Fill entire screen */
-            object-position: center top; /* Focus on top content */
+            object-fit: contain; /* Show complete image */
         }
         /* Visual hint (press H to toggle) */
         .click-hint {
@@ -38,6 +36,7 @@
             border: 2px dashed red;
             pointer-events: none;
             display: none;
+            z-index: 10;
         }
     </style>
 </head>
@@ -60,20 +59,13 @@
             const originalCoords = [325,1025,975,1325]; // left,top,right,bottom
             
             function adjustLayout() {
-                const screenRatio = window.innerWidth / window.innerHeight;
-                const imgRatio = imgWidth / imgHeight;
-                
                 // Calculate scaling factors
                 const scaleX = img.clientWidth / imgWidth;
                 const scaleY = img.clientHeight / imgHeight;
+                const scale = Math.min(scaleX, scaleY); // Uniform scaling
                 
                 // Scale click area coordinates
-                const scaledCoords = [
-                    Math.round(originalCoords[0] * scaleX),
-                    Math.round(originalCoords[1] * scaleY),
-                    Math.round(originalCoords[2] * scaleX),
-                    Math.round(originalCoords[3] * scaleY)
-                ];
+                const scaledCoords = originalCoords.map(coord => Math.round(coord * scale));
                 
                 // Create/update image map
                 let map = document.querySelector('map');
@@ -95,6 +87,10 @@
                 hint.style.top = `${scaledCoords[1]}px`;
                 hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
                 hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
+                
+                // Center the image container
+                const container = document.querySelector('.image-container');
+                container.style.transform = `scale(${scale})`;
             }
             
             // Toggle hint with H key
@@ -107,16 +103,6 @@
             // Initialize and update on resize
             adjustLayout();
             window.addEventListener('resize', adjustLayout);
-            
-            // Debug click positions (Alt+Click)
-            img.addEventListener('click', function(e) {
-                if (e.altKey) {
-                    const rect = this.getBoundingClientRect();
-                    const x = Math.round(e.clientX - rect.left);
-                    const y = Math.round(e.clientY - rect.top);
-                    alert(`Clicked at: ${x}, ${y}`);
-                }
-            });
         });
     </script>
 </body>
