@@ -14,7 +14,7 @@
     html, body {
       height: 100vh;
       width: 100vw;
-      overflow: hidden;
+      overflow: hidden; /* Allow scrolling if necessary */
     }
 
     body {
@@ -22,7 +22,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start; /* Start the content from the top */
     }
 
     .banner {
@@ -36,7 +36,7 @@
 
     .spacer {
       flex: 1;
-      max-height: 30vh; /* limits middle section from pushing bottom banner off-screen */
+      max-height: 25vh; /* reduced this section to ensure bottom banner is visible */
       width: 100%;
       display: flex;
       justify-content: center;
