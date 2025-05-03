@@ -17,7 +17,7 @@
       overflow: hidden;
     }
 
-    /* Background container - matches your choose your card.html */
+    /* Background container */
     .background-container {
       position: fixed;
       top: 0;
@@ -27,7 +27,7 @@
       z-index: 0;
     }
 
-    /* Background image - exact same behavior as your original file */
+    /* Background image */
     .background-image {
       width: 100%;
       height: 100%;
@@ -46,29 +46,21 @@
       z-index: 1;
     }
 
-    /* Below image - solution for mobile visibility */
+    /* Below image - now 4x bigger (800px) and properly positioned */
     .below-image {
       position: absolute;
-      top: calc(12% + 300px);
+      top: calc(12% + 255px + 20px); /* Center image top + height + 20px gap */
       left: 50%;
       transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
+      width: 800px; /* 4x original size */
+      height: 800px;
       z-index: 1;
-      /* Add these mobile-specific fixes */
-      max-width: 90vw; /* Prevents overflow on mobile */
-      max-height: 40vh; /* Ensures visibility on small screens */
-      object-fit: contain; /* Maintains aspect ratio */
     }
 
-    /* Media query matches your original landscape behavior */
+    /* Media query for landscape */
     @media (orientation: landscape) {
       .background-image {
         object-fit: contain;
-      }
-      .below-image {
-        max-width: 40vw; /* Better fit for landscape */
-        max-height: 60vh;
       }
     }
   </style>
@@ -82,7 +74,7 @@
   <!-- Your top centered image -->
   <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
   
-  <!-- Bottom image with mobile visibility fix -->
+  <!-- Bottom image - now 4x bigger and properly positioned -->
   <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
 </body>
 </html>
