@@ -14,67 +14,65 @@
             overflow-x: hidden;
             background-color: #000;
             width: 100vw;
-            min-height: 100vh;
-            position: relative;
+            /* Remove min-height to allow natural image scrolling */
         }
         .result-container {
             width: 100%;
-            height: 100vh;
+            /* Remove fixed height to allow scrolling */
             position: relative;
         }
         .result-image {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto; /* Key change: Allows full-height scrolling */
+            display: block;
         }
         /* Red box for star area */
         .star-box {
             position: absolute;
-            top: 0%;
-            left: 40%;
-            transform: translateX(-40%);
-            width: 40%;
-            height: 30%;
+            top: 30%; /* Adjust vertical position */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 20%;
             border: 3px solid red;
             z-index: 1;
         }
         /* Red box for bottom area */
         .bottom-box {
             position: absolute;
-            bottom: 10%;
+            bottom: 15%; /* Adjust vertical position */
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            height: 55%;
+            height: 15%;
             border: 3px solid red;
             z-index: 1;
         }
         @media (orientation: landscape) {
             .result-image {
-                object-fit: contain;
+                width: 100%;
+                height: auto; /* Maintain scrollability */
             }
             .star-box {
-                top: 5%;
+                top: 25%;
                 width: 40%;
-                height: 40%;
+                height: 25%;
             }
             .bottom-box {
-                bottom: 5%;
-                width: 30%;
-                height: 30%;
+                bottom: 10%;
+                width: 60%;
+                height: 15%;
             }
         }
     </style>
 </head>
 <body>
     <div class="result-container">
-        <!-- Background Image -->
+        <!-- Background Image (now scrollable at full size) -->
         <img src="Photo/Page 3 (New).png" alt="Result" class="result-image">
         
-        <!-- Red box for star area -->
+        <!-- Positioning boxes -->
         <div class="star-box"></div>
-        
-        <!-- Red box for bottom area -->
         <div class="bottom-box"></div>
     </div>
 </body>
