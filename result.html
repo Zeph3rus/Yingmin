@@ -26,42 +26,42 @@
             height: auto; /* Key change: Allows full-height scrolling */
             display: block;
         }
-        /* Red box for star area */
+        /* Adjusted Star Box - 50% higher */
         .star-box {
             position: absolute;
-            top: 30%; /* Adjust vertical position */
-            left: 50%;
+            top: 18%; /* Changed from 30% to 15% (50% higher) */
+            left: 49%;
             transform: translateX(-50%);
             width: 60%;
             height: 20%;
             border: 3px solid red;
             z-index: 1;
         }
-        /* Red box for bottom area */
+        /* Adjusted Bottom Box - 30% taller and 10% higher */
         .bottom-box {
             position: absolute;
-            bottom: 15%; /* Adjust vertical position */
+            bottom: 16.5%; /* Changed from 15% to 16.5% (10% higher) */
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            height: 15%;
+            height: 19.5%; /* Changed from 15% to 19.5% (30% taller) */
             border: 3px solid red;
             z-index: 1;
-        }
+			
         @media (orientation: landscape) {
             .result-image {
                 width: 100%;
                 height: auto; /* Maintain scrollability */
             }
             .star-box {
-                top: 25%;
+                top: 12.5%;
                 width: 40%;
                 height: 25%;
             }
             .bottom-box {
-                bottom: 10%;
+                bottom: 9%;
                 width: 60%;
-                height: 15%;
+                height: 19.5%;
             }
         }
     </style>
