@@ -22,50 +22,46 @@
             height: 100vh;
             position: relative;
         }
-        .background-image {
+        .result-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            position: absolute;
-            z-index: 0;
         }
-        .result-content {
+        /* Red box for star area */
+        .star-box {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 30%;
+            border: 3px solid red;
             z-index: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 15% 10% 10%;
         }
-        .result-message {
+        /* Red box for bottom area */
+        .bottom-box {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
             width: 80%;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .song-recommendation {
-            width: 80%;
-            max-width: 500px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .song-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 15px;
-            border-radius: 20px;
+            height: 15%;
+            border: 3px solid red;
+            z-index: 1;
         }
         @media (orientation: landscape) {
-            .background-image {
+            .result-image {
                 object-fit: contain;
             }
-            .result-content {
-                padding: 5% 15% 5%;
+            .star-box {
+                top: 20%;
+                width: 40%;
+                height: 40%;
+            }
+            .bottom-box {
+                bottom: 5%;
+                width: 60%;
+                height: 20%;
             }
         }
     </style>
@@ -73,37 +69,13 @@
 <body>
     <div class="result-container">
         <!-- Background Image -->
-        <img src="Photo/Page 3 (New).png" alt="Background" class="background-image">
+        <img src="Photo/Page 3 (New).png" alt="Result" class="result-image">
         
-        <!-- Result Content -->
-        <div class="result-content">
-            <!-- Result Message (Star Area) -->
-            <div class="result-message">
-                <img id="resultImage" src="Photo/Result 1.png" alt="Your Result">
-            </div>
-            
-            <!-- Song Recommendation (Bottom Area) -->
-            <div class="song-recommendation">
-                <img id="songImage" src="Photo/Song1.png" alt="Song Recommendation">
-                <a href="https://www.youtube.com/watch?v=pC6tPEaAiYU&list=RDpC6tPEaAiYU&start_radio=1 " id="youtubeLink" class="song-link">Listen on YouTube</a>
-            </div>
-        </div>
+        <!-- Red box for star area -->
+        <div class="star-box"></div>
+        
+        <!-- Red box for bottom area -->
+        <div class="bottom-box"></div>
     </div>
-
-    <script>
-        // Get random result (1-12)
-        const randomId = Math.floor(Math.random() * 12) + 1;
-        
-        // Set the image sources
-        document.getElementById('resultImage').src = `Photo/Result ${randomId}.png`;
-        document.getElementById('songImage').src = `Photo/Song${randomId}.png`;
-        
-        // You can add specific YouTube links for each song if needed
-        const youtubeLinks = [
-            "https://youtu.be/example1",
-            // Add links for all 12 songs...
-        ];
-        document.getElementById('youtubeLink').href = youtubeLinks[randomId-1];
-    </script>
 </body>
 </html>
