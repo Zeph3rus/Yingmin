@@ -35,14 +35,25 @@
       object-position: center;
     }
 
-    /* Adjusted centered overlay image */
+    /* Top centered image (unchanged) */
     .center-image {
       position: absolute;
-      top: 20%; /* Positioned 20% from the top */
+      top: 12%;
       left: 50%;
       transform: translateX(-50%);
       width: 300px;
       height: 300px;
+      z-index: 1;
+    }
+
+   /* Adjusted bottom image (now half size) */
+    .bottom-image {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px; /* 1x smaller (half of 300px) */
+      height: 150px; /* 1x smaller (half of 300px) */
       z-index: 1;
     }
 
@@ -60,7 +71,10 @@
     <img src="Photo/Page 1 blank.png" alt="Background" class="background-image">
   </div>
   
-  <!-- Your centered overlay image -->
-  <img src="Photo/Page 1 2.png" alt="Centered Image" class="center-image">
+  <!-- Your top centered image -->
+  <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
+  
+  <!-- New bottom image -->
+  <img src="Photo/Page 1 1.png" alt="Bottom Image" class="bottom-image">
 </body>
 </html>
