@@ -24,55 +24,52 @@
             height: auto;
             display: block;
         }
-        /* Star Box Container */
+        /* Star Box Container - now allows full image display */
         .star-box {
             position: absolute;
             top: 18%;
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            height: 35%;
+            height: auto; /* Changed to auto to fit content */
+            min-height: 35%; /* Minimum height */
             z-index: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
-        /* Bottom Box Container */
+        /* Bottom Box Container - now allows full image display */
         .bottom-box {
             position: absolute;
             bottom: 12%;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            height: 32%;
+            height: auto; /* Changed to auto to fit content */
+            min-height: 32%; /* Minimum height */
             z-index: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
-        /* Image styling for both boxes */
+        /* Image styling - now ensures full display */
         .box-image {
+            max-width: 100%;
+            max-height: 100%;
             width: auto;
-            height: 100%;
+            height: auto;
             object-fit: contain;
         }
         @media (orientation: landscape) {
             .star-box {
                 top: 12.5%;
                 width: 40%;
-                height: 32%;
+                min-height: 32%;
             }
             .bottom-box {
                 bottom: 9%;
                 width: 75%;
-                height: 25%;
-            }
-            /* Adjust image display for landscape */
-            .box-image {
-                width: 100%;
-                height: auto;
+                min-height: 25%;
             }
         }
     </style>
@@ -94,34 +91,34 @@
     </div>
 
     <script>
-        // Image arrays - replace with your actual image paths
+        // Image arrays
         const starImages = [
-			'Photo/Result 1.png',
-			'Photo/Result 2.png',
-			'Photo/Result 3.png',
-			'Photo/Result 4.png',
-			'Photo/Result 5.png',
-			'Photo/Result 6.png',
-			'Photo/Result 7.png',
-			'Photo/Result 8.png',
-			'Photo/Result 9.png',
-			'Photo/Result 10.png',
-			'Photo/Result 11.png',
-			'Photo/Result 12.png'
+            'Photo/Result 1.png',
+            'Photo/Result 2.png',
+            'Photo/Result 3.png',
+            'Photo/Result 4.png',
+            'Photo/Result 5.png',
+            'Photo/Result 6.png',
+            'Photo/Result 7.png',
+            'Photo/Result 8.png',
+            'Photo/Result 9.png',
+            'Photo/Result 10.png',
+            'Photo/Result 11.png',
+            'Photo/Result 12.png'
         ];
         
         const bottomImages = [
             'Photo/Song1.png',
             'Photo/Song2.png',
-			'Photo/Song3.png',
+            'Photo/Song3.png',
             'Photo/Song4.png',
-			'Photo/Song5.png',
+            'Photo/Song5.png',
             'Photo/Song6.png',
-			'Photo/Song7.png',
+            'Photo/Song7.png',
             'Photo/Song8.png',
-			'Photo/Song9.png',
+            'Photo/Song9.png',
             'Photo/Song10.png',
-			'Photo/Song11.png',
+            'Photo/Song11.png',
             'Photo/Song12.png'
         ];
 
@@ -132,29 +129,19 @@
         document.getElementById('starResult').src = starImages[randomIndex];
         document.getElementById('bottomResult').src = bottomImages[randomIndex];
         
-        // Adjust image display based on orientation
-        function adjustImageDisplay() {
+        // Function to handle image loading
+        function handleImageLoad() {
             const starImg = document.getElementById('starResult');
             const bottomImg = document.getElementById('bottomResult');
             
-            if (window.matchMedia("(orientation: landscape)").matches) {
-                // Landscape - fit width
-                starImg.style.width = '100%';
-                starImg.style.height = 'auto';
-                bottomImg.style.width = '100%';
-                bottomImg.style.height = 'auto';
-            } else {
-                // Portrait - fit height
-                starImg.style.width = 'auto';
-                starImg.style.height = '100%';
-                bottomImg.style.width = 'auto';
-                bottomImg.style.height = '100%';
-            }
+            // Ensure images are fully visible after loading
+            starImg.style.maxHeight = 'none';
+            bottomImg.style.maxHeight = 'none';
         }
         
-        // Run on load and resize
-        window.addEventListener('load', adjustImageDisplay);
-        window.addEventListener('resize', adjustImageDisplay);
+        // Run when images load
+        document.getElementById('starResult').addEventListener('load', handleImageLoad);
+        document.getElementById('bottomResult').addEventListener('load', handleImageLoad);
     </script>
 </body>
 </html>
