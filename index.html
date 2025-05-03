@@ -14,33 +14,29 @@
     html, body {
       height: 100vh;
       width: 100vw;
-      overflow: hidden; /* Allow scrolling if necessary */
+      overflow: hidden; /* Prevent scrolling */
     }
 
     body {
       background-color: white;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-start; /* Start the content from the top */
+      justify-content: space-between; /* Space out the content from top to bottom */
     }
 
     .banner {
       width: 100%;
       max-width: 1356px;
       height: auto;
-      max-height: 35vh; /* slightly reduced to allow bottom image to show */
+      max-height: 35vh; /* Top and Bottom Banners should have max height */
       object-fit: contain;
-      flex-shrink: 0;
     }
 
     .spacer {
-      flex: 1;
-      max-height: 25vh; /* reduced this section to ensure bottom banner is visible */
-      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      flex: 1; /* Fill remaining space between the banners */
     }
 
     .box-container {
