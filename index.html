@@ -35,7 +35,7 @@
       object-position: center;
     }
 
-    /* Center image (now 10% smaller than original) */
+    /* Center image */
     .center-image {
       position: absolute;
       top: 12%;
@@ -46,14 +46,14 @@
       z-index: 1;
     }
 
-    /* New image below center image */
+    /* Below image - now 3x bigger (600px) */
     .below-image {
       position: absolute;
-      top: calc(12% + 300px); /* Positioned below center image with 30px gap */
+      top: calc(12% + 300px); /* Positioned below center image */
       left: 50%;
       transform: translateX(-50%);
-      width: 200px; /* Adjust as needed */
-      height: 200px; /* Adjust as needed */
+      width: 600px; /* 3x of original 200px */
+      height: 600px; /* 3x of original 200px */
       z-index: 1;
     }
 
@@ -74,7 +74,7 @@
   <!-- Your top centered image -->
   <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
   
-  <!-- New image below center image -->
+  <!-- New image below center image (now 3x bigger) -->
   <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
 </body>
 </html>
