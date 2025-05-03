@@ -14,52 +14,54 @@
             overflow-x: hidden;
             background-color: #000;
             width: 100vw;
+            min-height: 100vh;
+            position: relative;
         }
         .result-container {
             width: 100%;
+            height: 100vh;
             position: relative;
         }
         .result-image {
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
+            object-fit: cover;
         }
         /* Red box for star area */
         .star-box {
             position: absolute;
-            top: 30%; /* Adjust this percentage to match star position */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 20%;
+            top: 0%;
+            left: 40%;
+            transform: translateX(-40%);
+            width: 40%;
+            height: 30%;
             border: 3px solid red;
             z-index: 1;
         }
         /* Red box for bottom area */
         .bottom-box {
             position: absolute;
-            bottom: 15%; /* Adjust this percentage to match empty space */
+            bottom: 10%;
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            height: 12%;
+            height: 55%;
             border: 3px solid red;
             z-index: 1;
         }
         @media (orientation: landscape) {
             .result-image {
-                width: 100%;
-                height: auto;
+                object-fit: contain;
             }
             .star-box {
-                top: 25%;
+                top: 5%;
                 width: 40%;
-                height: 25%;
+                height: 40%;
             }
             .bottom-box {
-                bottom: 10%;
-                width: 60%;
-                height: 15%;
+                bottom: 5%;
+                width: 30%;
+                height: 30%;
             }
         }
     </style>
