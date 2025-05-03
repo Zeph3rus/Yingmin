@@ -12,9 +12,9 @@
     }
 
     html, body {
-      height: 100vh;
-      width: 100vw;
-      overflow: auto; /* Changed to allow scrolling if needed */
+      height: 100%;
+      width: 100%;
+      overflow: auto;
     }
 
     /* Background container */
@@ -27,7 +27,6 @@
       z-index: 0;
     }
 
-    /* Background image */
     .background-image {
       width: 100%;
       height: 100%;
@@ -35,38 +34,39 @@
       object-position: center;
     }
 
-    /* Content container to hold both images */
-.content-wrapper {
-  position: relative;
-  width: 100%;
-  min-height: 200vh; /* doubled height to allow space for the below image */
-  z-index: 1;
+    .content-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 12%;
+      padding-bottom: 5vh; /* add bottom space */
+      z-index: 1;
+      gap: 20px;
     }
 
-    /* Center image */
     .center-image {
-      position: absolute;
-      top: 12%;
-      left: 50%;
-      transform: translateX(-50%);
       width: 255px;
       height: 255px;
     }
 
-    /* Below image - 4x bigger (800px) */
     .below-image {
-      position: absolute;
-      top: calc(12% + 255px + 20px); /* Center image top + height + gap */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 800px;
+      width: auto;
+      height: auto;
+      max-width: 90vw;
+      max-height: 60vh; /* Ensures it remains fully visible */
+      object-fit: contain;
     }
 
-    /* Media query for landscape */
     @media (orientation: landscape) {
       .background-image {
         object-fit: contain;
+      }
+      .below-image {
+        max-width: 60vw;
+        max-height: 60vh;
       }
     }
   </style>
@@ -79,11 +79,8 @@
   
   <!-- Content wrapper -->
   <div class="content-wrapper">
-    <!-- Your top centered image -->
     <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
-    
-    <!-- Bottom image -->
-    <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
+    <img src="Photo/Page 1 button.png" alt="Button" class="below-image">
   </div>
 </body>
 </html>
