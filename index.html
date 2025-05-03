@@ -35,14 +35,14 @@
       object-position: center;
     }
 
-    /* Centered overlay image */
+    /* Adjusted centered overlay image */
     .center-image {
       position: absolute;
-      top: 50%;
+      top: calc(50% - 100px); /* Moved up by 100px (0.5x of new height) */
       left: 50%;
-      transform: translate(-50%, -50%);
-      width: 200px;
-      height: 200px;
+      transform: translateX(-50%);
+      width: 300px; /* 1.5x of original 200px */
+      height: 300px; /* 1.5x of original 200px */
       z-index: 1;
     }
 
