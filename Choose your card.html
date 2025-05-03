@@ -40,10 +40,11 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 10px; /* Reduced from 20px to 10px */
-            row-gap: 10px; /* Specifically reduce vertical gap */
+            gap: 5px; /* Reduced gap */
+            row-gap: 2px; /* Very small vertical gap between rows */
             z-index: 1;
-            padding: 5px; /* Reduced padding */
+            padding: 0; /* No padding */
+            margin-top: 20px; /* Push first row lower */
         }
         .card {
             width: 100%;
@@ -52,7 +53,6 @@
             background-repeat: no-repeat;
             background-position: center;
             transition: transform 0.3s;
-            border: 1px solid rgba(255,255,255,0.2);
         }
         .card:hover {
             transform: scale(1.05);
@@ -66,8 +66,9 @@
                 height: 80%;
                 max-width: 1200px;
                 max-height: 800px;
-                gap: 8px; /* Smaller gap for landscape */
-                row-gap: 8px;
+                gap: 4px;
+                row-gap: 1px;
+                margin-top: 30px;
             }
         }
     </style>
@@ -77,7 +78,7 @@
         <!-- Background Image -->
         <img src="Photo/Webpage 2.png" alt="Background" class="background-image">
         
-        <!-- Cards Grid -->
+        <!-- Cards Grid - Now borderless with adjusted spacing -->
         <div class="cards-container">
             <div class="card" style="background-image: url('Photo/card 1.png')"></div>
             <div class="card" style="background-image: url('Photo/card 2.png')"></div>
