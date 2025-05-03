@@ -31,7 +31,7 @@
     .background-image {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Matches your original portrait behavior */
+      object-fit: cover;
       object-position: center;
     }
 
@@ -46,27 +46,35 @@
       z-index: 1;
     }
 
-    /* Below image - now 3x bigger (600px) */
+    /* Below image - solution for mobile visibility */
     .below-image {
       position: absolute;
-      top: calc(12% + 300px); /* Positioned below center image */
+      top: calc(12% + 300px);
       left: 50%;
       transform: translateX(-50%);
-      width: 600px; /* 3x of original 200px */
-      height: 600px; /* 3x of original 200px */
+      width: 600px;
+      height: 600px;
       z-index: 1;
+      /* Add these mobile-specific fixes */
+      max-width: 90vw; /* Prevents overflow on mobile */
+      max-height: 40vh; /* Ensures visibility on small screens */
+      object-fit: contain; /* Maintains aspect ratio */
     }
 
     /* Media query matches your original landscape behavior */
     @media (orientation: landscape) {
       .background-image {
-        object-fit: contain; /* Matches your landscape behavior */
+        object-fit: contain;
+      }
+      .below-image {
+        max-width: 40vw; /* Better fit for landscape */
+        max-height: 60vh;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Background image container - matches your structure -->
+  <!-- Background image container -->
   <div class="background-container">
     <img src="Photo/page 1 bitna-52.png" alt="Background" class="background-image">
   </div>
@@ -74,7 +82,7 @@
   <!-- Your top centered image -->
   <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
   
-  <!-- New image below center image (now 3x bigger) -->
+  <!-- Bottom image with mobile visibility fix -->
   <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
 </body>
 </html>
