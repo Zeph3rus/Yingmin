@@ -93,12 +93,28 @@
                 // Original coordinates
                 const originalCoords = [400,1100,900,1250]; // left,top,right,bottom
                 
+                // Calculate center point of original area
+                const centerX = (originalCoords[0] + originalCoords[2]) / 2;
+                const centerY = (originalCoords[1] + originalCoords[3]) / 2;
+                
+                // Calculate original width/height
+                const originalWidth = originalCoords[2] - originalCoords[0];
+                const originalHeight = originalCoords[3] - originalCoords[1];
+                
+                // Create 1.5x larger coordinates (50% bigger)
+                const enlargedCoords = [
+                    centerX - (originalWidth * 1.5 / 2),  // left
+                    centerY - (originalHeight * 1.5 / 2), // top
+                    centerX + (originalWidth * 1.5 / 2),  // right
+                    centerY + (originalHeight * 1.5 / 2)  // bottom
+                ];
+                
                 // Scale to display size
                 const scaledCoords = [
-                    Math.round(originalCoords[0] * scaleX + offsetX),
-                    Math.round(originalCoords[1] * scaleY + offsetY),
-                    Math.round(originalCoords[2] * scaleX + offsetX),
-                    Math.round(originalCoords[3] * scaleY + offsetY)
+                    Math.round(enlargedCoords[0] * scaleX + offsetX),
+                    Math.round(enlargedCoords[1] * scaleY + offsetY),
+                    Math.round(enlargedCoords[2] * scaleX + offsetX),
+                    Math.round(enlargedCoords[3] * scaleY + offsetY)
                 ];
                 
                 // Update both elements
