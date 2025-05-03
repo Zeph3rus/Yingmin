@@ -14,7 +14,7 @@
     html, body {
       height: 100vh;
       width: 100vw;
-      overflow: hidden;
+      overflow: auto; /* Changed to allow scrolling if needed */
     }
 
     /* Background container */
@@ -35,6 +35,14 @@
       object-position: center;
     }
 
+    /* Content container to hold both images */
+.content-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 200vh; /* doubled height to allow space for the below image */
+  z-index: 1;
+    }
+
     /* Center image */
     .center-image {
       position: absolute;
@@ -43,18 +51,16 @@
       transform: translateX(-50%);
       width: 255px;
       height: 255px;
-      z-index: 1;
     }
 
-    /* Below image - now 4x bigger (800px) and properly positioned */
+    /* Below image - 4x bigger (800px) */
     .below-image {
       position: absolute;
-      top: calc(12% + 255px + 20px); /* Center image top + height + 20px gap */
+      top: calc(12% + 255px + 20px); /* Center image top + height + gap */
       left: 50%;
       transform: translateX(-50%);
-      width: 800px; /* 4x original size */
+      width: 800px;
       height: 800px;
-      z-index: 1;
     }
 
     /* Media query for landscape */
@@ -71,10 +77,13 @@
     <img src="Photo/page 1 bitna-52.png" alt="Background" class="background-image">
   </div>
   
-  <!-- Your top centered image -->
-  <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
-  
-  <!-- Bottom image - now 4x bigger and properly positioned -->
-  <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Your top centered image -->
+    <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
+    
+    <!-- Bottom image -->
+    <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
+  </div>
 </body>
 </html>
