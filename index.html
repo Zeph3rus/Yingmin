@@ -35,25 +35,14 @@
       object-position: center;
     }
 
-    /* Top centered image (unchanged) */
+    /* Adjusted center image (5% smaller) */
     .center-image {
       position: absolute;
       top: 12%;
       left: 50%;
       transform: translateX(-50%);
-      width: 300px;
-      height: 300px;
-      z-index: 1;
-    }
-
-   /* Adjusted bottom image (now half size) */
-    .bottom-image {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px; /* 1x smaller (half of 300px) */
-      height: 80px; /* 1x smaller (half of 300px) */
+      width: 285px; /* 300px - 5% (15px) */
+      height: 285px; /* 300px - 5% (15px) */
       z-index: 1;
     }
 
@@ -68,13 +57,10 @@
 <body>
   <!-- Background image container - matches your structure -->
   <div class="background-container">
-    <img src="Photo/Page 1 blank.png" alt="Background" class="background-image">
+    <img src="Photo/page 1 bitna-52.png" alt="Background" class="background-image">
   </div>
   
-  <!-- Your top centered image -->
+  <!-- Your top centered image (now 5% smaller) -->
   <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
-  
-  <!-- New bottom image -->
-  <img src="Photo/Page 1 1.png" alt="Bottom Image" class="bottom-image">
 </body>
 </html>
