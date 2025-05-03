@@ -17,22 +17,21 @@
       overflow: hidden;
     }
 
-    /* Background container */
+    /* Background container - matches your choose your card.html */
     .background-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      z-index: 0; /* Behind everything */
+      z-index: 0;
     }
 
-    /* Background image - shows fully without cropping */
+    /* Background image - exact same behavior as your original file */
     .background-image {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Shows full image without cropping */
+      object-fit: cover; /* Matches your original portrait behavior */
       object-position: center;
     }
 
@@ -44,18 +43,19 @@
       transform: translate(-50%, -50%);
       width: 200px;
       height: 200px;
-      z-index: 1; /* Above background */
+      z-index: 1;
     }
 
-    /* Fallback for body */
-    body {
-      background-color: white;
-      position: relative;
+    /* Media query matches your original landscape behavior */
+    @media (orientation: landscape) {
+      .background-image {
+        object-fit: contain; /* Matches your landscape behavior */
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Background image container -->
+  <!-- Background image container - matches your structure -->
   <div class="background-container">
     <img src="Photo/Page 1 blank.png" alt="Background" class="background-image">
   </div>
