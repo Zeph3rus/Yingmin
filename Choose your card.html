@@ -40,9 +40,9 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: 2%;
+            gap: 20px;
             z-index: 1;
-            padding: 2%;
+            padding: 20px;
         }
         .card {
             width: 100%;
@@ -51,6 +51,7 @@
             background-repeat: no-repeat;
             background-position: center;
             transition: transform 0.3s;
+            border: 1px solid rgba(255,255,255,0.2); /* Temporary border for debugging */
         }
         .card:hover {
             transform: scale(1.05);
@@ -60,8 +61,10 @@
                 object-fit: contain;
             }
             .cards-container {
-                width: 80%;
-                height: 90%;
+                width: 90%;
+                height: 80%;
+                max-width: 1200px;
+                max-height: 800px;
             }
         }
     </style>
