@@ -53,16 +53,17 @@
             justify-content: flex-end;
             align-items: center;
         }
-        /* New inner red box at bottom 1/3 position */
-        .inner-red-box {
+        /* Invisible clickable area */
+        .song-link {
             position: absolute;
-            bottom: 18%; /* 1/3 from bottom */
+            bottom: 18%;
             left: 50%;
             transform: translateX(-50%);
             width: 60%;
             height: 20%;
-            border: 3px solid red;
             z-index: 2;
+            cursor: pointer;
+            opacity: 0; /* Make invisible */
         }
         /* Image styling */
         .box-image {
@@ -83,7 +84,7 @@
                 width: 97.5%;
                 min-height: 32.5%;
             }
-            .inner-red-box {
+            .song-link {
                 width: 55%;
                 height: 25%;
             }
@@ -100,58 +101,92 @@
             <img id="starResult" class="box-image" src="Photo/Result 1.png" alt="Star Result">
         </div>
         
-        <!-- Bottom Box with random image and inner red box -->
+        <!-- Bottom Box with random image and clickable area -->
         <div class="bottom-box">
             <img id="bottomResult" class="box-image" src="Photo/Song1.png" alt="Bottom Result">
-            <div class="inner-red-box"></div>
+            <a id="songLink" class="song-link" target="_blank"></a>
         </div>
     </div>
 
     <script>
-        // Image arrays
-        const starImages = [
-            'Photo/Result 1.png',
-            'Photo/Result 2.png',
-            'Photo/Result 3.png',
-            'Photo/Result 4.png',
-            'Photo/Result 5.png',
-            'Photo/Result 6.png',
-            'Photo/Result 7.png',
-            'Photo/Result 8.png',
-            'Photo/Result 9.png',
-            'Photo/Result 10.png',
-            'Photo/Result 11.png',
-            'Photo/Result 12.png'
-        ];
-        
-        const bottomImages = [
-            'Photo/Song1.png',
-            'Photo/Song2.png',
-            'Photo/Song3.png',
-            'Photo/Song4.png',
-            'Photo/Song5.png',
-            'Photo/Song6.png',
-            'Photo/Song7.png',
-            'Photo/Song8.png',
-            'Photo/Song9.png',
-            'Photo/Song10.png',
-            'Photo/Song11.png',
-            'Photo/Song12.png'
+        // Image arrays and YouTube links
+        const resultsData = [
+            {
+                resultImg: 'Photo/Result 1.png',
+                songImg: 'Photo/Song1.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=pC6tPEaAiYU&list=RDpC6tPEaAiYU&start_radio=1 '
+            },
+            {
+                resultImg: 'Photo/Result 2.png',
+                songImg: 'Photo/Song2.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=bw4AuPrLWeA&list=RDbw4AuPrLWeA&start_radio=1 '
+            },
+            {
+                resultImg: 'Photo/Result 3.png',
+                songImg: 'Photo/Song3.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=W3iSnJ663II&list=RDW3iSnJ663II&start_radio=1  '
+            },
+			{
+                resultImg: 'Photo/Result 4.png',
+                songImg: 'Photo/Song4.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=B93veLfx3aU&list=RDB93veLfx3aU&start_radio=1  '
+            },
+			{
+                resultImg: 'Photo/Result 5.png',
+                songImg: 'Photo/Song5.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=SNpuKLfv1EE&list=RDSNpuKLfv1EE&start_radio=1  '
+            },
+			{
+                resultImg: 'Photo/Result 6.png',
+                songImg: 'Photo/Song6.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=gH1rVdXUlpo&list=RDgH1rVdXUlpo&start_radio=1  '
+            },
+			{
+                resultImg: 'Photo/Result 7.png',
+                songImg: 'Photo/Song7.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=FIInyEWWW-s&list=RDFIInyEWWW-s&start_radio=1  '
+            },
+			{
+                resultImg: 'Photo/Result 8.png',
+                songImg: 'Photo/Song8.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=BZD5m9K8hxk&list=RDBZD5m9K8hxk&start_radio=1 '
+            },
+			{
+                resultImg: 'Photo/Result 9.png',
+                songImg: 'Photo/Song9.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=cDq1vUwM21k&list=RDcDq1vUwM21k&start_radio=1'
+            },
+						{
+                resultImg: 'Photo/Result 10.png',
+                songImg: 'Photo/Song10.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=GdoNGNe5CSg&list=RDGdoNGNe5CSg&start_radio=1 '
+            },
+						{
+                resultImg: 'Photo/Result 11.png',
+                songImg: 'Photo/Song11.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=qWQ1xOfUNYQ&list=RDqWQ1xOfUNYQ&start_radio=1 '
+            },
+            {
+                resultImg: 'Photo/Result 12.png',
+                songImg: 'Photo/Song12.png',
+                youtubeLink: 'https://www.youtube.com/watch?v=tXV7dfvSefo&list=RDtXV7dfvSefo&start_radio=1 '
+            }
         ];
 
         // Get random index
         const randomIndex = Math.floor(Math.random() * 12);
+        const selectedResult = resultsData[randomIndex];
         
-        // Set random images
-        document.getElementById('starResult').src = starImages[randomIndex];
-        document.getElementById('bottomResult').src = bottomImages[randomIndex];
+        // Set random content
+        document.getElementById('starResult').src = selectedResult.resultImg;
+        document.getElementById('bottomResult').src = selectedResult.songImg;
+        document.getElementById('songLink').href = selectedResult.youtubeLink;
         
         // Function to handle image loading
         function handleImageLoad() {
             const starImg = document.getElementById('starResult');
             const bottomImg = document.getElementById('bottomResult');
             
-            // Ensure images are fully visible after loading
             starImg.style.maxHeight = 'none';
             bottomImg.style.maxHeight = 'none';
         }
