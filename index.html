@@ -14,7 +14,7 @@
     html, body {
       height: 100%;
       width: 100%;
-      overflow: auto;
+      overflow: hidden;
     }
 
     .background-container {
@@ -36,31 +36,40 @@
     .content-wrapper {
       position: relative;
       width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 12%;
-      padding-bottom: 5vh;
+      height: 100%;
       z-index: 1;
-      gap: 20px;
     }
 
     .center-image {
+      position: absolute;
+      top: 12%;
+      left: 50%;
+      transform: translateX(-50%);
       width: 255px;
       height: 255px;
     }
 
-    /* Red line for visualizing bottom of center image */
-    .center-line {
-      width: 100%;
-      height: 2px;
-      background-color: red;
+ .center-box {
+  position: absolute;
+  top: calc(12% + 255px + 3%);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  max-width: 45vw;
+  max-height: 30vh;
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
     }
 
     .below-image {
-      width: auto;
-      height: auto;
+      position: absolute;
+      top: calc(12% + 255px + 15%);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
       max-width: 90vw;
       max-height: 60vh;
       object-fit: contain;
@@ -70,6 +79,12 @@
       .background-image {
         object-fit: contain;
       }
+
+      .center-box {
+        max-width: 30vw;
+        max-height: 30vh;
+      }
+
       .below-image {
         max-width: 60vw;
         max-height: 60vh;
@@ -78,13 +93,15 @@
   </style>
 </head>
 <body>
+  <!-- Background -->
   <div class="background-container">
     <img src="Photo/page 1 bitna-52.png" alt="Background" class="background-image">
   </div>
 
+  <!-- Foreground content -->
   <div class="content-wrapper">
     <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
-    <div class="center-line"></div> <!-- Red line directly below the center image -->
+    <div class="center-box"></div>
     <img src="Photo/Page 1 button.png" alt="Button" class="below-image">
   </div>
 </body>
