@@ -12,7 +12,7 @@
         }
         body {
             overflow: hidden;
-            background-color:#FFFFFF ;
+            background-color: #000;
             height: 100vh;
             width: 100vw;
         }
@@ -44,6 +44,7 @@
             border: 2px dashed rgba(255,255,255,0.5);
             background: rgba(255,0,0,0.2);
             pointer-events: auto; /* Enable pointer events on the hint */
+            opacity: 0; /* Make the hint invisible */
         }
 
         /* Center image styling */
@@ -62,8 +63,10 @@
     <div class="image-container">
         <img src="Photo/page 1_.png" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
         
-        <!-- First clickable hint (existing one) -->
-        <div class="click-hint" id="clickHint1"></div>
+        <!-- First clickable hint wrapped in anchor to redirect -->
+        <a href="Choose your card.html">
+            <div class="click-hint" id="clickHint1"></div>
+        </a>
         
         <!-- Second clickable hint wrapped in anchor to redirect -->
         <a href="https://linktr.ee/bitnaclub" target="_blank">
