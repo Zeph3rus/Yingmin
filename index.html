@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lip Jelly - Bitna</title>
     <style>
         * {
@@ -14,7 +14,6 @@
             overflow: hidden;
             background-color: #000;
             height: 100vh;
-            width: 100vw;
         }
         .image-container {
             position: fixed;
@@ -22,129 +21,102 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         .responsive-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            object-position: center top;
+            object-fit: contain;
+            display: block;
         }
-        @media (orientation: landscape) {
-            .responsive-image {
-                object-fit: contain;
-            }
-        }
-        
-        /* Debug overlay styles */
-        .debug-overlay {
+        .click-hint {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            border: 2px dashed rgba(255,255,255,0.5);
+            background: rgba(255,0,0,0.2);
             pointer-events: none;
-            display: block; /* Changed to always show for debugging */
-        }
-        .debug-area {
-            position: absolute;
-            background-color: rgba(255, 0, 0, 0.3);
-            border: 2px dashed yellow;
-        }
-        .debug-label {
-            position: absolute;
-            color: white;
-            background-color: rgba(0,0,0,0.7);
-            padding: 2px 5px;
-            font-size: 12px;
-            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
     <div class="image-container">
         <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
+        <div class="click-hint" id="clickHint"></div>
         <map name="ImageMap">
-            <!-- Adjusted coordinates to fit "Shining dreams begin here" text -->
             <area shape="rect" 
-                  coords="300,1200,1050,1350" 
+                  coords="0,0,0,0" 
                   href="Choose your card.html"
-                  alt="Continue">
+                  alt="Continue to Cards"
+                  id="clickArea">
         </map>
-        
-        <!-- Debug overlay - always visible in this version -->
-        <div class="debug-overlay" id="debugOverlay"></div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const img = document.querySelector('.responsive-image');
-            const debugOverlay = document.getElementById('debugOverlay');
-            
-            // Adjusted scaling function for your specific image
-            function scaleImageMap() {
+            const hint = document.getElementById('clickHint');
+            const area = document.getElementById('clickArea');
+
+            function scaleElements() {
                 const naturalWidth = 1356;
                 const naturalHeight = 1919;
-                const scaleFactor = img.clientWidth / naturalWidth;
-                
-                const areas = document.querySelectorAll('area');
-                areas.forEach(area => {
-                    const coords = area.getAttribute('coords').split(',').map(Number);
-                    const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
-                    area.setAttribute('coords', scaledCoords.join(','));
-                });
-                
-                updateDebugOverlay();
+
+                const container = img.getBoundingClientRect();
+                const displayWidth = container.width;
+                const displayHeight = container.height;
+
+                // Get actual image dimensions after object-fit: contain
+                const imgRatio = naturalWidth / naturalHeight;
+                const containerRatio = displayWidth / displayHeight;
+
+                let actualWidth, actualHeight, offsetX, offsetY;
+
+                if (imgRatio > containerRatio) {
+                    // Image is limited by width
+                    actualWidth = displayWidth;
+                    actualHeight = displayWidth / imgRatio;
+                    offsetX = 0;
+                    offsetY = (displayHeight - actualHeight) / 2;
+                } else {
+                    // Image is limited by height
+                    actualHeight = displayHeight;
+                    actualWidth = displayHeight * imgRatio;
+                    offsetX = (displayWidth - actualWidth) / 2;
+                    offsetY = 0;
+                }
+
+                const scaleX = actualWidth / naturalWidth;
+                const scaleY = actualHeight / naturalHeight;
+
+                // Original coordinates
+                const originalCoords = [400, 1100, 900, 1250];
+
+                // Scale and adjust for offset
+                const scaledCoords = [
+                    Math.round(originalCoords[0] * scaleX + offsetX),
+                    Math.round(originalCoords[1] * scaleY + offsetY),
+                    Math.round(originalCoords[2] * scaleX + offsetX),
+                    Math.round(originalCoords[3] * scaleY + offsetY)
+                ];
+
+                // Apply to <area> and hint box
+                area.setAttribute('coords', scaledCoords.join(','));
+
+                hint.style.left = `${scaledCoords[0]}px`;
+                hint.style.top = `${scaledCoords[1]}px`;
+                hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
+                hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
             }
-            
-            function updateDebugOverlay() {
-                debugOverlay.innerHTML = '';
-                
-                const areas = document.querySelectorAll('area');
-                const imgRect = img.getBoundingClientRect();
-                const scaleX = imgRect.width / 1356;
-                const scaleY = imgRect.height / 1919;
-                
-                areas.forEach((area, index) => {
-                    const coords = area.getAttribute('coords').split(',').map(Number);
-                    const shape = area.getAttribute('shape');
-                    
-                    const debugArea = document.createElement('div');
-                    debugArea.className = 'debug-area';
-                    
-                    const debugLabel = document.createElement('div');
-                    debugLabel.className = 'debug-label';
-                    debugLabel.textContent = `Clickable Area: "${area.getAttribute('alt')}"`;
-                    
-                    if (shape === 'rect') {
-                        const [x1, y1, x2, y2] = coords;
-                        debugArea.style.left = `${x1 * scaleX}px`;
-                        debugArea.style.top = `${y1 * scaleY}px`;
-                        debugArea.style.width = `${(x2 - x1) * scaleX}px`;
-                        debugArea.style.height = `${(y2 - y1) * scaleY}px`;
-                        
-                        debugLabel.style.left = `${x1 * scaleX}px`;
-                        debugLabel.style.top = `${y1 * scaleY - 20}px`;
-                    }
-                    
-                    debugOverlay.appendChild(debugArea);
-                    debugOverlay.appendChild(debugLabel);
-                });
-            }
-            
-            window.addEventListener('load', scaleImageMap);
-            window.addEventListener('resize', scaleImageMap);
-            
-            // Debug tool (Alt+Click to see coordinates)
-            img.addEventListener('click', function(e) {
+
+            scaleElements();
+            window.addEventListener('resize', scaleElements);
+
+            // Debug click
+            img.addEventListener('click', function (e) {
                 if (e.altKey) {
                     const rect = this.getBoundingClientRect();
                     const x = Math.round(e.clientX - rect.left);
                     const y = Math.round(e.clientY - rect.top);
-                    const origX = Math.round(x * (1356 / rect.width));
-                    const origY = Math.round(y * (1919 / rect.height));
+                    const origX = Math.round((x - rect.left) * (1356 / rect.width));
+                    const origY = Math.round((y - rect.top) * (1919 / rect.height));
                     alert(`Current: ${x},${y}\nOriginal: ${origX},${origY}`);
                 }
             });
