@@ -14,45 +14,51 @@
             overflow-x: hidden;
             background-color: #000;
             width: 100vw;
-            /* Remove min-height to allow natural image scrolling */
         }
         .result-container {
             width: 100%;
-            /* Remove fixed height to allow scrolling */
             position: relative;
         }
         .result-image {
             width: 100%;
-            height: auto; /* Key change: Allows full-height scrolling */
+            height: auto;
             display: block;
         }
-        /* Adjusted Star Box - 50% higher */
+        /* Star Box Container */
         .star-box {
             position: absolute;
-            top: 18%; /* Changed from 30% to 15% (50% higher) */
-            left: 49%;
+            top: 18%;
+            left: 50%;
             transform: translateX(-50%);
             width: 60%;
             height: 20%;
-            border: 3px solid red;
             z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
-        /* Adjusted Bottom Box - 30% taller and 10% higher */
+        /* Bottom Box Container */
         .bottom-box {
             position: absolute;
-            bottom: 16.5%; /* Changed from 15% to 16.5% (10% higher) */
+            bottom: 16.5%;
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            height: 25%; /* Changed from 15% to 19.5% (30% taller) */
-            border: 3px solid red;
+            height: 25%;
             z-index: 1;
-			
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        /* Image styling for both boxes */
+        .box-image {
+            width: auto;
+            height: 100%;
+            object-fit: contain;
+        }
         @media (orientation: landscape) {
-            .result-image {
-                width: 100%;
-                height: auto; /* Maintain scrollability */
-            }
             .star-box {
                 top: 12.5%;
                 width: 40%;
@@ -63,17 +69,92 @@
                 width: 60%;
                 height: 19.5%;
             }
+            /* Adjust image display for landscape */
+            .box-image {
+                width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
 <body>
     <div class="result-container">
-        <!-- Background Image (now scrollable at full size) -->
+        <!-- Background Image -->
         <img src="Photo/Page 3 (New).png" alt="Result" class="result-image">
         
-        <!-- Positioning boxes -->
-        <div class="star-box"></div>
-        <div class="bottom-box"></div>
+        <!-- Star Box with random image -->
+        <div class="star-box">
+            <img id="starResult" class="box-image" src="Photo/Result 1.png" alt="Star Result">
+        </div>
+        
+        <!-- Bottom Box with random image -->
+        <div class="bottom-box">
+            <img id="bottomResult" class="box-image" src="Photo/Song1.png" alt="Bottom Result">
+        </div>
     </div>
+
+    <script>
+        // Image arrays - replace with your actual image paths
+        const starImages = [
+			'Photo/Result 1.png',
+			'Photo/Result 2.png',
+			'Photo/Result 3.png',
+			'Photo/Result 4.png',
+			'Photo/Result 5.png',
+			'Photo/Result 6.png',
+			'Photo/Result 7.png',
+			'Photo/Result 8.png',
+			'Photo/Result 9.png',
+			'Photo/Result 10.png',
+			'Photo/Result 11.png',
+			'Photo/Result 12.png'
+        ];
+        
+        const bottomImages = [
+            'Photo/Song1.png',
+            'Photo/Song2.png',
+			'Photo/Song3.png',
+            'Photo/Song4.png',
+			'Photo/Song5.png',
+            'Photo/Song6.png',
+			'Photo/Song7.png',
+            'Photo/Song8.png',
+			'Photo/Song9.png',
+            'Photo/Song10.png',
+			'Photo/Song11.png',
+            'Photo/Song12.png'
+        ];
+
+        // Get random index
+        const randomIndex = Math.floor(Math.random() * 12);
+        
+        // Set random images
+        document.getElementById('starResult').src = starImages[randomIndex];
+        document.getElementById('bottomResult').src = bottomImages[randomIndex];
+        
+        // Adjust image display based on orientation
+        function adjustImageDisplay() {
+            const starImg = document.getElementById('starResult');
+            const bottomImg = document.getElementById('bottomResult');
+            
+            if (window.matchMedia("(orientation: landscape)").matches) {
+                // Landscape - fit width
+                starImg.style.width = '100%';
+                starImg.style.height = 'auto';
+                bottomImg.style.width = '100%';
+                bottomImg.style.height = 'auto';
+            } else {
+                // Portrait - fit height
+                starImg.style.width = 'auto';
+                starImg.style.height = '100%';
+                bottomImg.style.width = 'auto';
+                bottomImg.style.height = '100%';
+            }
+        }
+        
+        // Run on load and resize
+        window.addEventListener('load', adjustImageDisplay);
+        window.addEventListener('resize', adjustImageDisplay);
+    </script>
 </body>
 </html>
