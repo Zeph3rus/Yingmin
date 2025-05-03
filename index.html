@@ -35,14 +35,25 @@
       object-position: center;
     }
 
-    /* Adjusted center image (now 10% smaller than original) */
+    /* Center image (now 10% smaller than original) */
     .center-image {
       position: absolute;
       top: 12%;
       left: 50%;
       transform: translateX(-50%);
-      width: 270px; /* 300px - 10% (30px) */
-      height: 270px; /* 300px - 10% (30px) */
+      width: 255px;
+      height: 255px;
+      z-index: 1;
+    }
+
+    /* New image below center image */
+    .below-image {
+      position: absolute;
+      top: calc(12% + 300px); /* Positioned below center image with 30px gap */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px; /* Adjust as needed */
+      height: 200px; /* Adjust as needed */
       z-index: 1;
     }
 
@@ -60,7 +71,10 @@
     <img src="Photo/page 1 bitna-52.png" alt="Background" class="background-image">
   </div>
   
-  <!-- Your top centered image (now 10% smaller than original) -->
+  <!-- Your top centered image -->
   <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
+  
+  <!-- New image below center image -->
+  <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
 </body>
 </html>
