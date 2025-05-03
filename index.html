@@ -14,43 +14,47 @@
     html, body {
       height: 100vh;
       width: 100vw;
-      overflow: hidden; /* Prevent scrolling */
+      overflow: hidden;
     }
 
     body {
       background-color: white;
-      background-image: url('Photo/Page 1 blank.png'); /* Fixed URL */
-      background-size: cover;
+      background-image: url('Photo/Page 1 blank.png');
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
-      display: flex;
-      justify-content: center; /* Center horizontally */
-      align-items: center; /* Center vertically */
-    }
-
-    .box-container {
-      display: flex;
-      flex-direction: column;
-      gap: 30px; /* Space between boxes */
-      align-items: center;
+      /* Removed background-size: cover to show full image */
+      position: relative; /* For absolute positioning of boxes */
     }
 
     .box {
-      width: 60px;
-      height: 60px;
+      width: 120px; /* 2x bigger (60px → 120px) */
+      height: 120px;
       background-color: red;
-      border-radius: 5px; /* Slightly rounded corners */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%); /* Center horizontally */
+    }
+
+    .box:nth-child(1) {
+      top: 20px; /* Top box */
+    }
+
+    .box:nth-child(2) {
+      top: 50%;
+      transform: translate(-50%, -50%); /* Middle box */
+    }
+
+    .box:nth-child(3) {
+      bottom: 20px; /* Bottom box */
+      transform: translateX(-50%); /* Only horizontal centering */
     }
   </style>
 </head>
 <body>
-  <!-- Container for the three boxes -->
-  <div class="box-container">
-    <div class="box"></div>
-    <div class="box"></div>
-    <div class="box"></div>
-  </div>
+  <!-- Three boxes positioned absolutely -->
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
 </body>
 </html>
