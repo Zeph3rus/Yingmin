@@ -37,7 +37,7 @@
                 object-fit: contain;
             }
         }
-        
+
         /* Visual indicator for the clickable area */
         .click-hint {
             position: absolute;
@@ -45,8 +45,8 @@
             background: rgba(255,0,0,0.2);
             pointer-events: none;
         }
-        
-        /* Center image styling (same size as per your original design) */
+
+        /* Center image styling */
         .center-image {
             width: 280px;
             height: 280px;
@@ -56,16 +56,19 @@
             transform: translateX(-50%);
             z-index: 1;
         }
-
-
     </style>
 </head>
 <body>
     <div class="image-container">
         <img src="Photo/page 1_.png" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
         
-        <!-- Visual hint (remove this div for final version) -->
-        <div class="click-hint" id="clickHint"></div>
+        <!-- First clickable hint (existing one) -->
+        <div class="click-hint" id="clickHint1"></div>
+        
+        <!-- Second clickable hint wrapped in anchor to redirect -->
+        <a href="https://linktr.ee/bitnaclub" target="_blank">
+            <div class="click-hint" id="clickHint2"></div>
+        </a>
         
         <map name="ImageMap">
             <!-- Rectangular area covering "Shining dreams begin here" -->
@@ -80,90 +83,73 @@
     <!-- Top centered image (same as previous design) -->
     <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
     
-    <!-- Box containing the below image -->
-    <div class="center-box">
-        <img src="Photo/Page 1 button.png" alt="Below Image" class="below-image">
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const img = document.querySelector('.responsive-image');
-            const hint = document.getElementById('clickHint');
+            const hint1 = document.getElementById('clickHint1');
+            const hint2 = document.getElementById('clickHint2');
             const area = document.getElementById('clickArea');
             
             function scaleElements() {
-                // Original image dimensions
                 const naturalWidth = 1356;
                 const naturalHeight = 1919;
-                
-                // Current display dimensions
                 const displayWidth = img.clientWidth;
                 const displayHeight = img.clientHeight;
-                
-                // Calculate the actual displayed image dimensions (may be different due to object-fit)
+
                 const imgRect = img.getBoundingClientRect();
                 const actualDisplayWidth = imgRect.width;
                 const actualDisplayHeight = imgRect.height;
-                
-                // Calculate the offset caused by object-fit/object-position
                 const offsetX = (displayWidth - actualDisplayWidth) / 2;
                 const offsetY = (displayHeight - actualDisplayHeight) / 2;
-                
-                // Scale factors based on actual displayed image
+
                 const scaleX = actualDisplayWidth / naturalWidth;
                 const scaleY = actualDisplayHeight / naturalHeight;
-                
-                // Original coordinates
-                const originalCoords = [400,1100,900,1250]; // left,top,right,bottom
-                
-                // Calculate center point of original area
+
+                const originalCoords = [400,1100,900,1250]; 
+
                 const centerX = (originalCoords[0] + originalCoords[2]) / 2;
                 const centerY = (originalCoords[1] + originalCoords[3]) / 2;
-                
-                // Calculate original width/height
+
                 const originalWidth = originalCoords[2] - originalCoords[0];
                 const originalHeight = originalCoords[3] - originalCoords[1];
-                
-                // Create 1.5x larger coordinates (50% bigger)
+
                 const enlargedCoords = [
-                    centerX - (originalWidth * 2 / 2),  // left
-                    centerY - (originalHeight * 1 / 2), // top
-                    centerX + (originalWidth * 2 / 2),  // right
-                    centerY + (originalHeight * 3.5 / 2)  // bottom
+                    centerX - (originalWidth * 2 / 2),
+                    centerY - (originalHeight * 1 / 2),
+                    centerX + (originalWidth * 2 / 2),
+                    centerY + (originalHeight * 3.5 / 2)
                 ];
-                
-                // Scale to display size
+
                 const scaledCoords = [
                     Math.round(enlargedCoords[0] * scaleX + offsetX),
                     Math.round(enlargedCoords[1] * scaleY + offsetY),
                     Math.round(enlargedCoords[2] * scaleX + offsetX),
                     Math.round(enlargedCoords[3] * scaleY + offsetY)
                 ];
-                
-                // Update both elements
+
                 area.setAttribute('coords', scaledCoords.join(','));
-                hint.style.left = `${scaledCoords[0]}px`;
-                hint.style.top = `${scaledCoords[1]}px`;
-                hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
-                hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
+                hint1.style.left = `${scaledCoords[0]}px`;
+                hint1.style.top = `${scaledCoords[1]}px`;
+                hint1.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
+                hint1.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
+
+                // For second hint, keep it 12% below the first hint and reduce the size by 50%
+                const secondHintTop = scaledCoords[3] + (scaledCoords[3] - scaledCoords[1]) * 0.12; // 12% gap
+                const secondHintWidth = (scaledCoords[2] - scaledCoords[0]) * 0.5; // 50% width of the first hint
+                const secondHintHeight = (scaledCoords[3] - scaledCoords[1]) * 0.5; // 50% height of the first hint
+                
+                // To center the second hint, subtract half of the width from the left
+                hint2.style.left = `${scaledCoords[0] + (scaledCoords[2] - scaledCoords[0] - secondHintWidth) / 2}px`;
+                hint2.style.top = `${secondHintTop}px`;
+                hint2.style.width = `${secondHintWidth}px`;
+                hint2.style.height = `${secondHintHeight}px`;
             }
             
-            // Initialize and update on resize
             window.addEventListener('load', scaleElements);
             window.addEventListener('resize', scaleElements);
-            
-            // Debug click coordinates (Alt+Click)
-            img.addEventListener('click', function(e) {
-                if (e.altKey) {
-                    const rect = this.getBoundingClientRect();
-                    const x = Math.round(e.clientX - rect.left);
-                    const y = Math.round(e.clientY - rect.top);
-                    const origX = Math.round((x - (window.innerWidth - rect.width)/2) * (1356 / rect.width));
-                    const origY = Math.round((y - (window.innerHeight - rect.height)/2) * (1919 / rect.height));
-                    alert(`Current: ${x},${y}\nOriginal: ${origX},${origY}`);
-                }
-            });
         });
     </script>
+
 </body>
 </html>
