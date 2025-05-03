@@ -1,79 +1,154 @@
 <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-     <title>Lip Jelly - Bitna</title>
-     <style>
-         * {
-             margin: 0;
-             padding: 0;
-             box-sizing: border-box;
-         }
- 
-         body {
-             overflow: hidden;
-             background-color: #000; /* Black fallback */
-             height: 100vh;
-             width: 100vw;
-         }
- 
-         .image-container {
-             position: fixed;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
-             display: flex;
-             justify-content: center;
-             align-items: center;
-         }
- 
-         .responsive-image {
-             /* Fill the screen while maintaining aspect ratio */
-             width: 100%;
-             height: 100%;
-             object-fit: cover; /* Changed from 'contain' to 'cover' */
-             object-position: center top; /* Focus on top portion */
-         }
- 
-         /* For landscape orientation */
-         @media (orientation: landscape) {
-             .responsive-image {
-                 object-fit: contain; /* Show full image in landscape */
-             }
-         }
-         
-     </style>
- </head>
- <body>
-     <div class="image-container">
-         <img src="Photo/Cover.jpg" alt="Lip Jelly - Love Flutter" class="responsive-image" usemap="#Map">
-         <map name="Map">
-             <area shape="rect" coords="135,662,649,800" href="Choose your card.html" alt="Choose Your Card">
-         </map>
-     </div>
- 
-     <script>
-         // Dynamic image map scaling
-         function scaleImageMap() {
-             const img = document.querySelector('.responsive-image');
-             const naturalWidth = 1356;
-             const naturalHeight = 1919;
-             const scaleFactor = img.clientWidth / naturalWidth;
- 
-             const areas = document.querySelectorAll('area');
-             areas.forEach(area => {
-                 const coords = area.getAttribute('coords').split(',').map(Number);
-                 const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
-                 area.setAttribute('coords', scaledCoords.join(','));
-             });
-         }
- 
-         // Initialize and update on resize
-         window.addEventListener('load', scaleImageMap);
-         window.addEventListener('resize', scaleImageMap);
-         
-     </script>
- </body>
- </html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lip Jelly - Bitna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+            background-color: #000;
+            height: 100vh;
+            width: 100vw;
+        }
+        .image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .responsive-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+        @media (orientation: landscape) {
+            .responsive-image {
+                object-fit: contain;
+            }
+        }
+        
+        /* Debug overlay styles */
+        .debug-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: block; /* Changed to always show for debugging */
+        }
+        .debug-area {
+            position: absolute;
+            background-color: rgba(255, 0, 0, 0.3);
+            border: 2px dashed yellow;
+        }
+        .debug-label {
+            position: absolute;
+            color: white;
+            background-color: rgba(0,0,0,0.7);
+            padding: 2px 5px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
+        <map name="ImageMap">
+            <!-- Adjusted coordinates to fit "Shining dreams begin here" text -->
+            <area shape="rect" 
+                  coords="300,1200,1050,1350" 
+                  href="Choose your card.html"
+                  alt="Continue">
+        </map>
+        
+        <!-- Debug overlay - always visible in this version -->
+        <div class="debug-overlay" id="debugOverlay"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.querySelector('.responsive-image');
+            const debugOverlay = document.getElementById('debugOverlay');
+            
+            // Adjusted scaling function for your specific image
+            function scaleImageMap() {
+                const naturalWidth = 1356;
+                const naturalHeight = 1919;
+                const scaleFactor = img.clientWidth / naturalWidth;
+                
+                const areas = document.querySelectorAll('area');
+                areas.forEach(area => {
+                    const coords = area.getAttribute('coords').split(',').map(Number);
+                    const scaledCoords = coords.map(coord => Math.round(coord * scaleFactor));
+                    area.setAttribute('coords', scaledCoords.join(','));
+                });
+                
+                updateDebugOverlay();
+            }
+            
+            function updateDebugOverlay() {
+                debugOverlay.innerHTML = '';
+                
+                const areas = document.querySelectorAll('area');
+                const imgRect = img.getBoundingClientRect();
+                const scaleX = imgRect.width / 1356;
+                const scaleY = imgRect.height / 1919;
+                
+                areas.forEach((area, index) => {
+                    const coords = area.getAttribute('coords').split(',').map(Number);
+                    const shape = area.getAttribute('shape');
+                    
+                    const debugArea = document.createElement('div');
+                    debugArea.className = 'debug-area';
+                    
+                    const debugLabel = document.createElement('div');
+                    debugLabel.className = 'debug-label';
+                    debugLabel.textContent = `Clickable Area: "${area.getAttribute('alt')}"`;
+                    
+                    if (shape === 'rect') {
+                        const [x1, y1, x2, y2] = coords;
+                        debugArea.style.left = `${x1 * scaleX}px`;
+                        debugArea.style.top = `${y1 * scaleY}px`;
+                        debugArea.style.width = `${(x2 - x1) * scaleX}px`;
+                        debugArea.style.height = `${(y2 - y1) * scaleY}px`;
+                        
+                        debugLabel.style.left = `${x1 * scaleX}px`;
+                        debugLabel.style.top = `${y1 * scaleY - 20}px`;
+                    }
+                    
+                    debugOverlay.appendChild(debugArea);
+                    debugOverlay.appendChild(debugLabel);
+                });
+            }
+            
+            window.addEventListener('load', scaleImageMap);
+            window.addEventListener('resize', scaleImageMap);
+            
+            // Debug tool (Alt+Click to see coordinates)
+            img.addEventListener('click', function(e) {
+                if (e.altKey) {
+                    const rect = this.getBoundingClientRect();
+                    const x = Math.round(e.clientX - rect.left);
+                    const y = Math.round(e.clientY - rect.top);
+                    const origX = Math.round(x * (1356 / rect.width));
+                    const origY = Math.round(y * (1919 / rect.height));
+                    alert(`Current: ${x},${y}\nOriginal: ${origX},${origY}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
