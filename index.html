@@ -12,7 +12,7 @@
         }
         body {
             overflow: hidden;
-            background-color: #000;
+            background-color:#FFFFFF ;
             height: 100vh;
             width: 100vw;
         }
@@ -134,8 +134,8 @@
                 hint1.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
                 hint1.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
 
-                // For second hint, keep it 12% below the first hint and reduce the size by 50%
-                const secondHintTop = scaledCoords[3] + (scaledCoords[3] - scaledCoords[1]) * 0.12; // 12% gap
+                // For second hint, move it an additional 15% lower (total 30%)
+                const secondHintTop = scaledCoords[3] + (scaledCoords[3] - scaledCoords[1]) * 0.30; // 30% gap total (15% + 15%)
                 const secondHintWidth = (scaledCoords[2] - scaledCoords[0]) * 0.5; // 50% width of the first hint
                 const secondHintHeight = (scaledCoords[3] - scaledCoords[1]) * 0.5; // 50% height of the first hint
                 
