@@ -17,7 +17,6 @@
       overflow: auto;
     }
 
-    /* Background container */
     .background-container {
       position: fixed;
       top: 0;
@@ -42,7 +41,7 @@
       flex-direction: column;
       align-items: center;
       padding-top: 12%;
-      padding-bottom: 5vh; /* add bottom space */
+      padding-bottom: 5vh;
       z-index: 1;
       gap: 20px;
     }
@@ -52,11 +51,18 @@
       height: 255px;
     }
 
+    /* Red line for visualizing bottom of center image */
+    .center-line {
+      width: 100%;
+      height: 2px;
+      background-color: red;
+    }
+
     .below-image {
       width: auto;
       height: auto;
       max-width: 90vw;
-      max-height: 60vh; /* Ensures it remains fully visible */
+      max-height: 60vh;
       object-fit: contain;
     }
 
@@ -72,14 +78,13 @@
   </style>
 </head>
 <body>
-  <!-- Background image container -->
   <div class="background-container">
     <img src="Photo/page 1 bitna-52.png" alt="Background" class="background-image">
   </div>
-  
-  <!-- Content wrapper -->
+
   <div class="content-wrapper">
     <img src="Photo/Page 1 2.png" alt="Top Image" class="center-image">
+    <div class="center-line"></div> <!-- Red line directly below the center image -->
     <img src="Photo/Page 1 button.png" alt="Button" class="below-image">
   </div>
 </body>
