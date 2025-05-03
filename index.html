@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lip Jelly - Bitna</title>
     <style>
         * {
@@ -14,6 +14,7 @@
             overflow: hidden;
             background-color: #000;
             height: 100vh;
+            width: 100vw;
         }
         .image-container {
             position: fixed;
@@ -21,13 +22,23 @@
             left: 0;
             width: 100%;
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .responsive-image {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            display: block;
+            object-fit: cover;
+            object-position: center top;
         }
+        @media (orientation: landscape) {
+            .responsive-image {
+                object-fit: contain;
+            }
+        }
+        
+        /* Visual indicator for the clickable area */
         .click-hint {
             position: absolute;
             border: 2px dashed rgba(255,255,255,0.5);
@@ -39,10 +50,12 @@
 <body>
     <div class="image-container">
         <img src="Photo/Cover.jpg" alt="Lip Jelly" class="responsive-image" usemap="#ImageMap">
+        <!-- Visual hint (remove this div for final version) -->
         <div class="click-hint" id="clickHint"></div>
         <map name="ImageMap">
+            <!-- Rectangular area covering "Shining dreams begin here" -->
             <area shape="rect" 
-                  coords="0,0,0,0" 
+                  coords="400,1100,900,1250" 
                   href="Choose your card.html"
                   alt="Continue to Cards"
                   id="clickArea">
@@ -50,73 +63,64 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const img = document.querySelector('.responsive-image');
             const hint = document.getElementById('clickHint');
             const area = document.getElementById('clickArea');
-
+            
             function scaleElements() {
+                // Original image dimensions
                 const naturalWidth = 1356;
                 const naturalHeight = 1919;
-
-                const container = img.getBoundingClientRect();
-                const displayWidth = container.width;
-                const displayHeight = container.height;
-
-                // Get actual image dimensions after object-fit: contain
-                const imgRatio = naturalWidth / naturalHeight;
-                const containerRatio = displayWidth / displayHeight;
-
-                let actualWidth, actualHeight, offsetX, offsetY;
-
-                if (imgRatio > containerRatio) {
-                    // Image is limited by width
-                    actualWidth = displayWidth;
-                    actualHeight = displayWidth / imgRatio;
-                    offsetX = 0;
-                    offsetY = (displayHeight - actualHeight) / 2;
-                } else {
-                    // Image is limited by height
-                    actualHeight = displayHeight;
-                    actualWidth = displayHeight * imgRatio;
-                    offsetX = (displayWidth - actualWidth) / 2;
-                    offsetY = 0;
-                }
-
-                const scaleX = actualWidth / naturalWidth;
-                const scaleY = actualHeight / naturalHeight;
-
+                
+                // Current display dimensions
+                const displayWidth = img.clientWidth;
+                const displayHeight = img.clientHeight;
+                
+                // Calculate the actual displayed image dimensions (may be different due to object-fit)
+                const imgRect = img.getBoundingClientRect();
+                const actualDisplayWidth = imgRect.width;
+                const actualDisplayHeight = imgRect.height;
+                
+                // Calculate the offset caused by object-fit/object-position
+                const offsetX = (displayWidth - actualDisplayWidth) / 2;
+                const offsetY = (displayHeight - actualDisplayHeight) / 2;
+                
+                // Scale factors based on actual displayed image
+                const scaleX = actualDisplayWidth / naturalWidth;
+                const scaleY = actualDisplayHeight / naturalHeight;
+                
                 // Original coordinates
-                const originalCoords = [400, 1100, 900, 1250];
-
-                // Scale and adjust for offset
+                const originalCoords = [400,1100,900,1250]; // left,top,right,bottom
+                
+                // Scale to display size
                 const scaledCoords = [
                     Math.round(originalCoords[0] * scaleX + offsetX),
                     Math.round(originalCoords[1] * scaleY + offsetY),
                     Math.round(originalCoords[2] * scaleX + offsetX),
                     Math.round(originalCoords[3] * scaleY + offsetY)
                 ];
-
-                // Apply to <area> and hint box
+                
+                // Update both elements
                 area.setAttribute('coords', scaledCoords.join(','));
-
                 hint.style.left = `${scaledCoords[0]}px`;
                 hint.style.top = `${scaledCoords[1]}px`;
                 hint.style.width = `${scaledCoords[2] - scaledCoords[0]}px`;
                 hint.style.height = `${scaledCoords[3] - scaledCoords[1]}px`;
             }
-
-            scaleElements();
+            
+            // Initialize and update on resize
+            window.addEventListener('load', scaleElements);
             window.addEventListener('resize', scaleElements);
-
-            // Debug click
-            img.addEventListener('click', function (e) {
+            
+            // Debug click coordinates (Alt+Click)
+            img.addEventListener('click', function(e) {
                 if (e.altKey) {
                     const rect = this.getBoundingClientRect();
                     const x = Math.round(e.clientX - rect.left);
                     const y = Math.round(e.clientY - rect.top);
-                    const origX = Math.round((x - rect.left) * (1356 / rect.width));
-                    const origY = Math.round((y - rect.top) * (1919 / rect.height));
+                    const origX = Math.round((x - (window.innerWidth - rect.width)/2) * (1356 / rect.width));
+                    const origY = Math.round((y - (window.innerHeight - rect.height)/2) * (1919 / rect.height));
                     alert(`Current: ${x},${y}\nOriginal: ${origX},${origY}`);
                 }
             });
